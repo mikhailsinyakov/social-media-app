@@ -1,5 +1,4 @@
 import React from 'react';
-import { withFirebaseContext } from "./Firebase";
 
 const App = () => {
   return (
@@ -9,4 +8,4 @@ const App = () => {
   );
 }
 
-export default withFirebaseContext(App);
+export default App;
