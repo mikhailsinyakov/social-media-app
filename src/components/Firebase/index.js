@@ -3,8 +3,8 @@ import Firebase from "./firebase";
 import FirebaseContext from "./context";
 
 const withFirebaseContext = Component => props =>
-  <Context.Provider value={new Firebase()}>
+  <FirebaseContext.Provider value={new Firebase()}>
     <Component {...props} />
-  </Context.Provider>;
+  </FirebaseContext.Provider>;
   
 export { FirebaseContext, withFirebaseContext };

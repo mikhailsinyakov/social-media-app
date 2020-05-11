@@ -15,7 +15,34 @@ const config = {
  
 class Firebase {
   constructor() {
-    app.initializeApp(config);
+    if (!app.apps.length) app.initializeApp(config);
+    this.auth = app.auth();
+  }
+  
+  createRecaptchaVerifier() {
+    this.recaptchaVerifier = new app.auth.RecaptchaVerifier(
+      "recaptcha", 
+      { "size": 'invisible' }
+    );
+  }
+  
+  async sendSMSCode(phoneNumber) {
+    try {
+      this.confirmationResult = await this.auth.signInWithPhoneNumber(
+        phoneNumber, 
+        this.recaptchaVerifier
+      );
+      return;
+    } catch (e) {
+      if (e.code === "auth/invalid-phone-number") {
+        throw new Error("Phone number is not valid");
+      } else throw new Error("Error sending SMS code");
+    }
+    
+  }
+  
+  confirmCode (code) {
+    return this.confirmationResult.confirm(code);
   }
 }
  
