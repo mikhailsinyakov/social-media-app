@@ -44,6 +44,10 @@ class Firebase {
   confirmCode (code) {
     return this.confirmationResult.confirm(code);
   }
+  
+  onUserChanged(fn) {
+    this.auth.onAuthStateChanged(fn);
+  }
 }
  
 export default Firebase;
