@@ -1,11 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import PhoneNumberLib from "awesome-phonenumber";
+import { useTranslation } from "react-i18next";
 import { FirebaseContext } from "components/Firebase";
+import HelpMessage from "./HelpMessage";
 import Form from "./Form";
 import Resend from "./Resend";
 
 const LogInByPhoneNumber = ({className}) => {
+  const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
   
   const [phoneNum, setPhoneNum] = useState("");
@@ -48,7 +51,7 @@ const LogInByPhoneNumber = ({className}) => {
         setShowVerifyForm(true);
         setIsPhoneNumSubmitting(false);
       }).catch(e => {
-        setPhoneNumSubmitErrorMsg(e.message);
+        setPhoneNumSubmitErrorMsg(t(e.message));
         setIsPhoneNumSubmitting(false);
       });
   };
@@ -59,7 +62,7 @@ const LogInByPhoneNumber = ({className}) => {
       .then(() => {
         setIsSMSSubmitting(false);
       }).catch(() => {
-        setSMSSubmitErrorMsg("Bad verification code");
+        setSMSSubmitErrorMsg(t("badVerificationCode"));
         setIsSMSSubmitting(false);
       });
   };
@@ -70,19 +73,20 @@ const LogInByPhoneNumber = ({className}) => {
   
   return (
     <div className={className}>
-      <p>Log in by phone number</p>
+      <p>{t("loginByPhoneNumber")}</p>
+      <HelpMessage>{t("loginByPhoneNumberMsg")}</HelpMessage>
       <Form
         show={true}
         type="tel"
-        placeholder="Phone number"
+        placeholder={t("phoneNumber")}
         changeValue={changePhoneNumber}
         isButtonActive={
           !wasPhoneNumUsed && !phoneNumSubmitErrorMsg && isPhoneNumValid
         }
-        showMsg={phoneNumSubmitErrorMsg || !isPhoneNumValid}
-        buttonName="Get code"
+        showMsg={!!(phoneNumSubmitErrorMsg || !isPhoneNumValid)}
+        buttonName={t("getCode")}
         action={sendSMS}
-        defaultMsg="Enter a valid phone number"
+        defaultMsg={t("phoneNumberDefaultMsg")}
         submitErrorMsg={phoneNumSubmitErrorMsg}
         valueHasChanged={phoneNumHasChanged}
         isSubmitting={isPhoneNumSubmitting}
@@ -90,10 +94,10 @@ const LogInByPhoneNumber = ({className}) => {
       <Form
         show={showVerifyForm}
         type="number"
-        placeholder="SMS code"
+        placeholder={t("smsCode")}
         isButtonActive={!SMSSubmitErrorMsg}
         showMsg={!!SMSSubmitErrorMsg}
-        buttonName="Log In"
+        buttonName={t("login")}
         action={checkVerifyCode}
         defaultMsg=""
         submitErrorMsg={SMSSubmitErrorMsg}

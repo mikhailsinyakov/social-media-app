@@ -35,8 +35,8 @@ class Firebase {
       return;
     } catch (e) {
       if (e.code === "auth/invalid-phone-number") {
-        throw new Error("Phone number is not valid");
-      } else throw new Error("Error sending SMS code");
+        throw new Error("phoneNumberIsNotValid");
+      } else throw new Error("errorSendingSMSCode");
     }
     
   }

@@ -1,0 +1,15 @@
+{
+  "appName": "Социальная сеть",
+  "phoneNumber": "Номер телефона",
+  "getCode": "Далее",
+  "loginByPhoneNumber": "Войти по номеру телефона",
+  "phoneNumberDefaultMsg": "Введите верный номер",
+  "loginByPhoneNumberMsg": "Мы отправим Вам сообщение с кодом подтверждения",
+  "smsCode": "СМС код",
+  "login": "Войти",
+  "badVerificationCode": "Неверный код",
+  "didntGetCode": "Код не пришел?",
+  "sendAgain": "Отправить еще раз",
+  "phoneNumberIsNotValid": "Номер введен неверно",
+  "errorSendingSMSCode": "Ошибка при отправлении кода"
+}

@@ -24,7 +24,7 @@ const Button = styled.button`
   &::after {
     content: "${({message}) => message}";
     position: absolute;
-    top: 2rem;
+    top: 1.5rem;
     left: -9rem;
     font-size: 0.6rem;
     margin: 0.4rem 0;
@@ -39,6 +39,7 @@ const Button = styled.button`
     &::after {
       left: -13rem;
       width: 12rem;
+      top: 1.8rem;
     }
   }
 `;

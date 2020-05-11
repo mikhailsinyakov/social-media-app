@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
 const Button = styled.button`
   background-color: transparent;
@@ -18,12 +19,16 @@ const Button = styled.button`
   }
 `;
 
-const Resend = ({onClick, className}) => (
-  <p className={className}>
-    Didn't get code?
-    <Button onClick={onClick}>Send again</Button>
-  </p>
-);
+const Resend = ({onClick, className}) => {
+  const { t } = useTranslation();
+  
+  return (
+    <p className={className}>
+      {t("didntGetCode")}
+      <Button onClick={onClick}>{t("sendAgain")}</Button>
+    </p>
+  );
+}
 
 Resend.propTypes = {
   onClick: PropTypes.func.isRequired

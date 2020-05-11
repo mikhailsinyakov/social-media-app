@@ -1,0 +1,15 @@
+{
+  "appName": "Social App",
+  "phoneNumber": "Phone number",
+  "getCode": "Get Code",
+  "loginByPhoneNumber": "Log in by phone number",
+  "phoneNumberDefaultMsg": "Enter a valid phone number",
+  "loginByPhoneNumberMsg": "We'll send you an SMS with a verification code",
+  "smsCode": "SMS code",
+  "login": "Log In",
+  "badVerificationCode": "Bad verification code",
+  "didntGetCode": "Didn't get code?",
+  "sendAgain": "Send again",
+  "phoneNumberIsNotValid": "Phone number is not valid",
+  "errorSendingSMSCode": "Error sending SMS code"
+}
