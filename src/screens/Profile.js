@@ -1,24 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+import withHeaderAndFooter from "./withHeaderAndFooter";
 import { useTranslation } from "react-i18next";
+import Profile from "components/Profile";
 
-import LogInByPhoneNumber from "components/LogInByPhoneNumber";
-
-
-const SignIn = ({className}) => {
+const ProfilePage = ({className}) => {
   const { t } = useTranslation();
+  
   return (
     <main>
       <div className={className}>
-        <h3>{t("appName")}</h3>
-        <LogInByPhoneNumber />
+        <h3>{t("profile")}</h3>
+        <Profile />
       </div>
     </main>
   );
-};
+}
   
-  
-const StyledSignIn = styled(SignIn)`
+const StyledProfilePage = styled(ProfilePage)`
   border: 1px solid #d8c9c9;
   margin: 2rem 1rem;
   padding: 1rem;
@@ -26,4 +25,4 @@ const StyledSignIn = styled(SignIn)`
   border-radius: 0.2rem;
 `;
 
-export default StyledSignIn;
+export default withHeaderAndFooter(StyledProfilePage);

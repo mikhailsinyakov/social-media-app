@@ -11,5 +11,14 @@
   "didntGetCode": "Код не пришел?",
   "sendAgain": "Отправить еще раз",
   "phoneNumberIsNotValid": "Номер введен неверно",
-  "errorSendingSMSCode": "Ошибка при отправлении кода"
+  "errorSendingSMSCode": "Ошибка при отправлении кода",
+  "logOut": "Выйти",
+  "profile": "Профиль",
+  "feed": "Лента",
+  "needToAddUsername": "Для использования сайта необходимо добавить ник",
+  "username": "Ник",
+  "usernameMinLength": "Не менее 4 символов",
+  "save": "Сохранить",
+  "saved": "Сохранено",
+  "couldntUpdateUsername": "Не получилось обновить ник"
 }

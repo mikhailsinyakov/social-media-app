@@ -48,6 +48,23 @@ class Firebase {
   onUserChanged(fn) {
     this.auth.onAuthStateChanged(fn);
   }
+  
+  setLanguage(language) {
+    this.auth.languageCode = language;
+  }
+  
+  logOut() {
+    this.auth.signOut();
+  }
+  
+  async updateUsername(username) {
+    try {
+      await this.auth.currentUser.updateProfile({ displayName: username });
+      return;
+    } catch (e) {
+      throw new Error("couldntUpdateUsername");
+    }
+  }
 }
  
 export default Firebase;

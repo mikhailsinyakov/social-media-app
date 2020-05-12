@@ -11,5 +11,14 @@
   "didntGetCode": "Didn't get code?",
   "sendAgain": "Send again",
   "phoneNumberIsNotValid": "Phone number is not valid",
-  "errorSendingSMSCode": "Error sending SMS code"
+  "errorSendingSMSCode": "Error sending SMS code",
+  "logOut": "Log Out",
+  "profile": "Profile",
+  "feed": "Feed",
+  "needToAddUsername": "To use the site you must add a username",
+  "username": "Username",
+  "usernameMinLength": "At least 4 characters long",
+  "save": "Save",
+  "saved": "Saved",
+  "couldntUpdateUsername": "Couldn't update username"
 }

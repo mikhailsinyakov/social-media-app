@@ -3,8 +3,8 @@ import styled from "styled-components";
 import PhoneNumberLib from "awesome-phonenumber";
 import { useTranslation } from "react-i18next";
 import { FirebaseContext } from "components/Firebase";
-import HelpMessage from "./HelpMessage";
-import Form from "./Form";
+import HelpMessage from "shared/HelpMessage";
+import Form from "shared/Form";
 import Resend from "./Resend";
 
 const LogInByPhoneNumber = ({className}) => {
@@ -59,9 +59,7 @@ const LogInByPhoneNumber = ({className}) => {
   const checkVerifyCode = verifyCode => {
     setIsSMSSubmitting(true);
     firebase.confirmCode(verifyCode)
-      .then(() => {
-        setIsSMSSubmitting(false);
-      }).catch(() => {
+      .catch(() => {
         setSMSSubmitErrorMsg(t("badVerificationCode"));
         setIsSMSSubmitting(false);
       });

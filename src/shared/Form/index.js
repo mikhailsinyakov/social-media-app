@@ -9,6 +9,7 @@ import Loader from "shared/Loader";
 const Form = ({
   className,
   show,
+  initValue = "",
   type, 
   placeholder, 
   changeValue, 
@@ -22,9 +23,9 @@ const Form = ({
   isSubmitting
 }) => {
   const inputEl = useRef(null);
-  const selStart = useRef(0);
+  const selStart = useRef(null);
   
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(initValue);
   
   const updateSelStart = (selIndex, value, changedValue) => {
     const digitsBeforeCursor = value.slice(0, selIndex)
@@ -43,9 +44,11 @@ const Form = ({
   const updateValue = e => {
     const { selectionStart: selIndex, value } = e.target;
     let changedValue = value;
-    if (changeValue) changedValue = changeValue(value);
-    updateSelStart(selIndex, value, changedValue);
-    valueHasChanged();
+    if (changeValue) {
+      changedValue = changeValue(value);
+      updateSelStart(selIndex, value, changedValue);
+    }
+    valueHasChanged(changedValue);
     
     setValue(changedValue);
   };
@@ -55,7 +58,7 @@ const Form = ({
   };
   
   useEffect(() => {
-    if (inputEl.current.type !== "number") {
+    if (selStart.current !== null) {
       const index = selStart.current;
       inputEl.current.setSelectionRange(index, index);
     }
@@ -91,6 +94,7 @@ const Form = ({
 
 Form.propTypes = {
   show: PropTypes.bool.isRequired,
+  initValue: PropTypes.string,  
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   changeValue: PropTypes.func,
