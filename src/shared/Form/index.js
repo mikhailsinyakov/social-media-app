@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
 import Input from "./Input";
 import Button from "./Button";
@@ -8,24 +9,35 @@ import Loader from "shared/Loader";
 
 const Form = ({
   className,
-  show,
-  initValue = "",
   type, 
   placeholder, 
-  changeValue, 
-  isButtonActive,
-  showMsg,
   buttonName, 
   action, 
-  defaultMsg,
-  submitErrorMsg,
-  valueHasChanged,
-  isSubmitting
+  modifyValue,
+  show = true,
+  autofocus = true,
+  initValue = "",
+  defaultMsg = "",
+  buttonNameSubmitted = null,
+  defaultSubmittedValue = null
 }) => {
+  const { t } = useTranslation();
   const inputEl = useRef(null);
   const selStart = useRef(null);
+  const isMount = useRef(false);
   
   const [value, setValue] = useState(initValue);
+  const [isValueValid, setIsValueValid] = useState(true);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittedValue, setSubmittedValue] = useState(defaultSubmittedValue);
+  
+  const isValueNew = submittedValue !== value;
+  const isButtonActive = value && isValueValid && isValueNew && !errorMsg;
+  const showMsg = value && (!isValueValid || !!errorMsg);
+  if (buttonNameSubmitted) {
+    buttonName = submittedValue === value ? buttonNameSubmitted : buttonName;
+  }
   
   const updateSelStart = (selIndex, value, changedValue) => {
     const digitsBeforeCursor = value.slice(0, selIndex)
@@ -43,19 +55,40 @@ const Form = ({
   
   const updateValue = e => {
     const { selectionStart: selIndex, value } = e.target;
-    let changedValue = value;
-    if (changeValue) {
-      changedValue = changeValue(value);
-      updateSelStart(selIndex, value, changedValue);
+    let newValue = value, isValid = isValueValid;
+    if (modifyValue) {
+      ({ newValue, isValid } = modifyValue(value));
+      updateSelStart(selIndex, value, newValue);
     }
-    valueHasChanged(changedValue);
     
-    setValue(changedValue);
+    setValue(newValue);
+    setIsValueValid(isValid);
+    setErrorMsg(null);
   };
   
-  const submit = () => {
-    if (value && isButtonActive) action(value);
+  const submit = async () => {
+    if (value && isButtonActive) {
+      setIsSubmitting(true);
+      try {
+        await action(value);
+        if (isMount.current) {
+          setSubmittedValue(value);
+          inputEl.current.blur();
+        }
+      } catch (e) {
+        setErrorMsg(t(e.message));
+      } finally {
+        isMount.current && setIsSubmitting(false);
+      }
+    }
   };
+  
+  useEffect(() => {
+    isMount.current = true;
+    return () => {
+      isMount.current = false;
+    };
+  }, []);
   
   useEffect(() => {
     if (selStart.current !== null) {
@@ -65,9 +98,9 @@ const Form = ({
   }, [value]);
   
   useEffect(() => {
-    if (show) inputEl.current.focus();
-    else setValue("");
-  }, [show]);
+    if (show && autofocus) inputEl.current.focus();
+    else if (!show) setValue("");
+  }, [show, autofocus]);
   
   return (
     <form className={className} onSubmit={e => {e.preventDefault();}}>
@@ -81,9 +114,9 @@ const Form = ({
       />
       <Button 
         onClick={submit} 
-        className={value && isButtonActive ? "active": ""}
-        showMsg={value && showMsg}
-        message={submitErrorMsg ? submitErrorMsg : defaultMsg}
+        className={isButtonActive ? "active": ""}
+        showMsg={showMsg}
+        message={errorMsg ? errorMsg : defaultMsg}
       >
         {buttonName}
       </Button>
@@ -93,19 +126,17 @@ const Form = ({
 };
 
 Form.propTypes = {
-  show: PropTypes.bool.isRequired,
-  initValue: PropTypes.string,  
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
-  changeValue: PropTypes.func,
-  isButtonActive: PropTypes.bool.isRequired,
-  showMsg: PropTypes.bool.isRequired,
   buttonName: PropTypes.string.isRequired,
   action: PropTypes.func.isRequired,
-  defaultMsg: PropTypes.string.isRequired,
-  submitErrorMsg: PropTypes.string.isRequired,
-  valueHasChanged: PropTypes.func.isRequired,
-  isSubmitting: PropTypes.bool.isRequired
+  modifyValue: PropTypes.func,
+  show: PropTypes.bool,
+  autofocus: PropTypes.bool,
+  initValue: PropTypes.string,
+  defaultMsg: PropTypes.string,
+  buttonNameSubmitted: PropTypes.string,
+  defaultSubmittedValue: PropTypes.string
 };
 
 const StyledForm = styled(Form)`
@@ -113,7 +144,7 @@ const StyledForm = styled(Form)`
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  opacity: ${({show}) => show ? "1" : "0"};
+  opacity: ${({show}) => typeof show === "boolean" ? show ? "1" : "0" : "1"};
 `;
 
 export default StyledForm;

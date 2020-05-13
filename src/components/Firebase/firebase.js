@@ -41,8 +41,12 @@ class Firebase {
     
   }
   
-  confirmCode (code) {
-    return this.confirmationResult.confirm(code);
+  async confirmCode (code) {
+    try {
+      return await this.confirmationResult.confirm(code);
+    } catch (e) {
+      throw new Error("badVerificationCode");
+    }
   }
   
   onUserChanged(fn) {

@@ -12,57 +12,31 @@ const LogInByPhoneNumber = ({className}) => {
   const firebase = useContext(FirebaseContext);
   
   const [phoneNum, setPhoneNum] = useState("");
-  const [isPhoneNumValid, setIsPhoneNumValid] = useState(false);
+  const [submittedPhoneNum, setSubmittedPhoneNum] = useState(null);
   const [showVerifyForm, setShowVerifyForm] = useState(false);
-  const [phoneNumSubmitErrorMsg, setPhoneNumSubmitErrorMsg] = useState("");
-  const [SMSSubmitErrorMsg, setSMSSubmitErrorMsg] = useState("");
-  const [isPhoneNumSubmitting, setIsPhoneNumSubmitting] = useState(false);
-  const [isSMSSubmitting, setIsSMSSubmitting] = useState(false);
-  const [wasPhoneNumUsed, setWasPhoneNumUsed] = useState(false);
   
-  const changePhoneNumber = num => {
+  const modifyPhoneNumber = num => {
     const ayt = PhoneNumberLib.getAsYouType();
     for (let i = 0; i < num.length; i++) {
       const char = num[i];
       if (i === 0) ayt.addChar("+");
       if (char.match(/\d/)) ayt.addChar(char);
     }
-    setPhoneNum(ayt.getPhoneNumber().getNumber());
-    setIsPhoneNumValid(ayt.getPhoneNumber().isValid());
+    const newPhoneNum = ayt.getPhoneNumber().getNumber();
+    setPhoneNum(newPhoneNum);
     if (showVerifyForm) setShowVerifyForm(false);
-    if (wasPhoneNumUsed) setWasPhoneNumUsed(false);
+    else if (submittedPhoneNum === newPhoneNum) setShowVerifyForm(true);
     
-    return ayt.number().trim();
+    return {
+      newValue: ayt.number().trim(),
+      isValid: ayt.getPhoneNumber().isValid()
+    };
   };
   
-  const phoneNumHasChanged = () => {
-    if (phoneNumSubmitErrorMsg) setPhoneNumSubmitErrorMsg("");
-  };
-  
-  const SMSCodeHasChanged = () => {
-    if (SMSSubmitErrorMsg) setSMSSubmitErrorMsg("");
-  }
-  
-  const sendSMS = () => {
-    setIsPhoneNumSubmitting(true);
-    setWasPhoneNumUsed(true);
-    firebase.sendSMSCode(phoneNum)
-      .then(() => {
-        setShowVerifyForm(true);
-        setIsPhoneNumSubmitting(false);
-      }).catch(e => {
-        setPhoneNumSubmitErrorMsg(t(e.message));
-        setIsPhoneNumSubmitting(false);
-      });
-  };
-  
-  const checkVerifyCode = verifyCode => {
-    setIsSMSSubmitting(true);
-    firebase.confirmCode(verifyCode)
-      .catch(() => {
-        setSMSSubmitErrorMsg(t("badVerificationCode"));
-        setIsSMSSubmitting(false);
-      });
+  const sendSMS = async () => {
+    await firebase.sendSMSCode(phoneNum);
+    setSubmittedPhoneNum(phoneNum);
+    setShowVerifyForm(true);
   };
   
   useEffect(() => {
@@ -74,33 +48,19 @@ const LogInByPhoneNumber = ({className}) => {
       <p>{t("loginByPhoneNumber")}</p>
       <HelpMessage>{t("loginByPhoneNumberMsg")}</HelpMessage>
       <Form
-        show={true}
         type="tel"
         placeholder={t("phoneNumber")}
-        changeValue={changePhoneNumber}
-        isButtonActive={
-          !wasPhoneNumUsed && !phoneNumSubmitErrorMsg && isPhoneNumValid
-        }
-        showMsg={!!(phoneNumSubmitErrorMsg || !isPhoneNumValid)}
         buttonName={t("getCode")}
         action={sendSMS}
+        modifyValue={modifyPhoneNumber}
         defaultMsg={t("phoneNumberDefaultMsg")}
-        submitErrorMsg={phoneNumSubmitErrorMsg}
-        valueHasChanged={phoneNumHasChanged}
-        isSubmitting={isPhoneNumSubmitting}
       />
       <Form
-        show={showVerifyForm}
         type="number"
         placeholder={t("smsCode")}
-        isButtonActive={!SMSSubmitErrorMsg}
-        showMsg={!!SMSSubmitErrorMsg}
         buttonName={t("login")}
-        action={checkVerifyCode}
-        defaultMsg=""
-        submitErrorMsg={SMSSubmitErrorMsg}
-        valueHasChanged={SMSCodeHasChanged}
-        isSubmitting={isSMSSubmitting}
+        action={code => firebase.confirmCode(code)}
+        show={showVerifyForm}
       />
       { showVerifyForm && <Resend onClick={sendSMS} /> }
       <div id="recaptcha"></div>
