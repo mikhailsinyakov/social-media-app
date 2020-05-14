@@ -17,6 +17,12 @@ class Firebase {
   constructor() {
     if (!app.apps.length) app.initializeApp(config);
     this.auth = app.auth();
+    this.googleProvider = new app.auth.GoogleAuthProvider();
+    this.githubProvider = new app.auth.GithubAuthProvider();
+    this.providers = {
+      "google.com": this.googleProvider,
+      "github.com": this.githubProvider
+    };
   }
   
   createRecaptchaVerifier() {
@@ -67,6 +73,38 @@ class Firebase {
       return;
     } catch (e) {
       throw new Error("couldntUpdateUsername");
+    }
+  }
+  
+  linkProvider(id) {
+    const provider = this.providers[id];
+    this.auth.currentUser.linkWithRedirect(provider);
+  }
+  
+  getRedirectResult() {
+    return new Promise(resolve => {
+      this.auth.getRedirectResult()
+        .then(result => {
+          const outcome = result.credential ? "success" : null;
+          resolve({ outcome });
+        }).catch(e => {
+          let cause;
+          if (e.code === "auth/credential-already-in-use") {
+            cause = "credentialsAlreadyInUse";
+          } else if (e.code === "auth/email-already-in-use") {
+            cause = "emailAlreadyInUse";
+          } else cause = "";
+          resolve({ outcome: "failure", cause, providerId: e.credential.providerId });
+        });
+    });
+  }
+  
+  async unlinkProvider(id) {
+    try {
+      await this.auth.currentUser.unlink(id);
+      return;
+    } catch (e) {
+      throw new Error("couldntUnlink");
     }
   }
 }

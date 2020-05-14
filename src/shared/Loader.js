@@ -16,11 +16,15 @@ const Loader = styled.div`
     100% { transform: rotate(360deg); }
   }
   
-  @media screen and (min-width: 400px) {
-    border: ${({size}) => size / 7.5}px solid #f3f3f3;
-    border-top-color: #3498db;
-    width: ${({size}) => size}px;
-    height: ${({size}) =>size}px;
+  ${({increaseSize, size}) => (increaseSize === undefined || increaseSize) && 
+    `
+      @media screen and (min-width: 400px) {
+        border: ${size / 7.5}px solid #f3f3f3;
+        border-top-color: #3498db;
+        width: ${size}px;
+        height: ${size}px;
+      }
+    `
   }
 `;
 

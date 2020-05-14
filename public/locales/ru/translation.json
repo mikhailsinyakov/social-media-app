@@ -19,6 +19,15 @@
   "username": "Ник",
   "usernameMinLength": "Не менее 4 символов",
   "save": "Сохранить",
-  "saved": "Сохранено",
-  "couldntUpdateUsername": "Не получилось обновить ник"
+  "saved": "Сохранен",
+  "couldntUpdateUsername": "Не удалось обновить ник",
+  "loginMethods": "Способы входа",
+  "link": "Привязать",
+  "unlink": "Отвязать",
+  "notLinked": "Не привязан",
+  "errorOccurred": "Произошла ошибка",
+  "couldntUnlink": "Не удалось отвязать",
+  "couldntLink": "Не удалось привязать",
+  "credentialsAlreadyInUse": "Эти учетные данные уже связаны с другим аккаунтом",
+  "emailAlreadyInUse": "Электронная почта уже связана с другим аккаунтом"
 }

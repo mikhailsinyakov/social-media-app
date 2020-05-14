@@ -20,5 +20,14 @@
   "usernameMinLength": "At least 4 characters long",
   "save": "Save",
   "saved": "Saved",
-  "couldntUpdateUsername": "Couldn't update username"
+  "couldntUpdateUsername": "Couldn't update username",
+  "loginMethods": "Login methods",
+  "link": "Link",
+  "unlink": "Unlink",
+  "notLinked": "Not linked",
+  "errorOccurred": "An error occurred",
+  "couldntUnlink": "Couldn't unlink",
+  "couldntLink": "Couldn't link to",
+  "credentialsAlreadyInUse": "This credential is already associated with a different user account",
+  "emailAlreadyInUse": "The email address is already in use by another account"
 }
