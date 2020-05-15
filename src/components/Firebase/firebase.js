@@ -107,6 +107,14 @@ class Firebase {
       throw new Error("couldntUnlink");
     }
   }
+  
+  loginWithGoogle() {
+    this.auth.signInWithRedirect(this.googleProvider);
+  }
+  
+  loginWithGithub() {
+    this.auth.signInWithRedirect(this.githubProvider);
+  }
 }
  
 export default Firebase;

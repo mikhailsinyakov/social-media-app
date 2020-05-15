@@ -29,5 +29,7 @@
   "couldntUnlink": "Не удалось отвязать",
   "couldntLink": "Не удалось привязать",
   "credentialsAlreadyInUse": "Эти учетные данные уже связаны с другим аккаунтом",
-  "emailAlreadyInUse": "Электронная почта уже связана с другим аккаунтом"
+  "emailAlreadyInUse": "Электронная почта уже связана с другим аккаунтом",
+  "signInWithGoogle": "Войти через Google",
+  "signInWithGithub": "Войти через Github"
 }

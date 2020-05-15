@@ -2,7 +2,7 @@
   "appName": "Social App",
   "phoneNumber": "Phone number",
   "getCode": "Get Code",
-  "loginByPhoneNumber": "Log in by phone number",
+  "loginByPhoneNumber": "Sign in by phone number",
   "phoneNumberDefaultMsg": "Enter a valid phone number",
   "loginByPhoneNumberMsg": "We'll send you an SMS with a verification code",
   "smsCode": "SMS code",
@@ -29,5 +29,7 @@
   "couldntUnlink": "Couldn't unlink",
   "couldntLink": "Couldn't link to",
   "credentialsAlreadyInUse": "This credential is already associated with a different user account",
-  "emailAlreadyInUse": "The email address is already in use by another account"
+  "emailAlreadyInUse": "The email address is already in use by another account",
+  "signInWithGoogle": "Sign in with Google",
+  "signInWithGithub": "Sign in with Github"
 }

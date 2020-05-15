@@ -2,23 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
-import LogInByPhoneNumber from "components/LogInByPhoneNumber";
+import Login from "components/Login";
 
-
-const SignIn = ({className}) => {
+const LoginPage = ({className}) => {
   const { t } = useTranslation();
   return (
     <main>
       <div className={className}>
         <h3>{t("appName")}</h3>
-        <LogInByPhoneNumber />
+        <Login />
       </div>
     </main>
   );
 };
   
   
-const StyledSignIn = styled(SignIn)`
+const StyledLoginPage = styled(LoginPage)`
   border: 1px solid #d8c9c9;
   margin: 2rem 1rem;
   padding: 1rem;
@@ -26,4 +25,4 @@ const StyledSignIn = styled(SignIn)`
   border-radius: 0.2rem;
 `;
 
-export default StyledSignIn;
+export default StyledLoginPage;

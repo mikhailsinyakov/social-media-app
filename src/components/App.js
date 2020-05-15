@@ -6,7 +6,7 @@ import { compose } from "recompose";
 import { FirebaseContext, withFirebaseContext } from "./Firebase";
 import { UserContext, withUserContext } from "./User";
 import Loader from "shared/Loader";
-import LogInPage from "screens/LogIn";
+import LoginPage from "screens/Login";
 import FeedPage from "screens/Feed";
 import ProfilePage from "screens/Profile";
 
@@ -53,7 +53,7 @@ const App = () => {
           ) : (
             <Switch>
               <Route exact path="/login">
-                <LogInPage />
+                <LoginPage />
               </Route>
               <Route>
                 <Redirect to="/login" />
