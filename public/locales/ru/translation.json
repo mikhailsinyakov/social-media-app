@@ -31,5 +31,12 @@
   "credentialsAlreadyInUse": "Эти учетные данные уже связаны с другим аккаунтом",
   "emailAlreadyInUse": "Электронная почта уже связана с другим аккаунтом",
   "signInWithGoogle": "Войти через Google",
-  "signInWithGithub": "Войти через Github"
+  "signInWithGithub": "Войти через Github",
+  "unlinkForbidden": "Вы не можете отвязать последний метод входа",
+  "close": "Закрыть",
+  "cancel": "Отменить",
+  "linkPhoneNumber": "Привязать номер телефона",
+  "couldntLinkThisNumber": "Не удалось привязать этот номер телефона",
+  "couldntLoginWithThisNumber": "Не удалось войти через этот номер телефона",
+  "phoneNumberAlreadyInUse": "Номер телефона уже используется"
 }

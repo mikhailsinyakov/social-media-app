@@ -1,18 +1,22 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { UserContext } from "components/User";
 import AuthProvider from "./AuthProvider";
 
-const getUserId = (user, providerId) => {
-  const provider = user.providerData.filter(data => 
-                    data.providerId === providerId)[0];
-  return provider && (provider.displayName || provider.uid);
-};
-
-const LoginMethods = ({error, setError}) => {
+const LoginMethods = ({
+  active, 
+  providers, 
+  removeProvider, 
+  setError, 
+  setLinkingPhoneNumber
+}) => {
   const { t } = useTranslation();
-  const user = useContext(UserContext);
+  
+  const getUserId = providerId => {
+    const provider = providers.filter(data => 
+                      data.providerId === providerId)[0];
+    return provider && (provider.displayName || provider.uid);
+  };
 
   const authProviders = [
     {id: "phone", name: t("phoneNumber")},
@@ -28,9 +32,12 @@ const LoginMethods = ({error, setError}) => {
           <AuthProvider 
             id={id} 
             name={name} 
-            userId={getUserId(user, id)} 
-            error={error}
+            userId={getUserId(id)} 
+            active={active}
             setError={setError}
+            unlinkForbidden={providers.length < 2}
+            unlinked={removeProvider}
+            setLinkingPhoneNumber={setLinkingPhoneNumber}
             key={id} 
           />
         )
@@ -40,8 +47,11 @@ const LoginMethods = ({error, setError}) => {
 };
 
 LoginMethods.propTypes = {
-  error: PropTypes.string,
-  setError: PropTypes.func.isRequired
+  active: PropTypes.bool.isRequired,
+  providers: PropTypes.array.isRequired,
+  removeProvider: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired,
+  setLinkingPhoneNumber: PropTypes.func.isRequired
 };
 
 export default LoginMethods;

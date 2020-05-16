@@ -5,13 +5,31 @@ import { FirebaseContext } from "components/Firebase";
 import { UserContext } from "components/User";
 import Username from "./Username";
 import LoginMethods from "./LoginMethods";
-import Modal from "shared/Modal";
+import ModalError from "shared/ModalError";
+import CheckPhoneNumber from "./CheckPhoneNumber";
 
 const Profile = ({className}) => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
   const user = useContext(UserContext);
+  const [providers, setProviders] = useState(user.providerData);
   const [error, setError] = useState(null);
+  
+  const [linkingPhoneNumber, setLinkingPhoneNumber] = useState(false);
+  const active = !error && !linkingPhoneNumber;
+  
+  const removeProvider = id => {
+    setProviders(providers.filter(data => data.providerId !== id));
+  }; 
+  
+  const addPhoneProvider = phoneNum => {
+    setProviders([...providers, {providerId: "phone", uid: phoneNum} ]);
+  };
+  
+  const phoneNumberHasLinked = number => {
+    setLinkingPhoneNumber(false);
+    addPhoneProvider(number);
+  };
   
   useEffect(() => {
     (async () => {
@@ -25,13 +43,24 @@ const Profile = ({className}) => {
 
   return (
     <div className={className}>
-      <Username currUsername={user.displayName} error={error} />
-      <LoginMethods error={error} setError={setError} />
+      <Username currUsername={user.displayName} active={active} />
+      <LoginMethods 
+        active={active} 
+        providers={providers}
+        removeProvider={removeProvider}
+        setError={setError} 
+        setLinkingPhoneNumber={setLinkingPhoneNumber}
+      />
       {error && 
-        <Modal 
-          title={t("errorOccurred")}
-          description={error} 
+        <ModalError 
+          message={error} 
           close={() => setError(null)}
+        />
+      }
+      {linkingPhoneNumber &&
+        <CheckPhoneNumber 
+          close={() => setLinkingPhoneNumber(false)} 
+          onSuccess={phoneNumberHasLinked}
         />
       }
     </div>
@@ -39,7 +68,6 @@ const Profile = ({className}) => {
 };
 
 const StyledProfile = styled(Profile)`
-  position: relative;
   margin: 1rem 0;
   text-align: center;
 `;

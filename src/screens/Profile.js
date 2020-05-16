@@ -18,6 +18,7 @@ const ProfilePage = ({className}) => {
 }
   
 const StyledProfilePage = styled(ProfilePage)`
+  position: relative;
   border: 1px solid #d8c9c9;
   margin: 2rem 1rem;
   padding: 1rem;

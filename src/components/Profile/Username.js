@@ -13,7 +13,7 @@ const modifyUsername = value => {
   };
 };
 
-const Username = ({currUsername, error}) => {
+const Username = ({currUsername, active}) => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
 
@@ -24,7 +24,7 @@ const Username = ({currUsername, error}) => {
         type="text"
         placeholder={t("username")}
         buttonName={t("save")}
-        action={username => !error && firebase.updateUsername(username)}
+        action={username => active && firebase.updateUsername(username)}
         modifyValue={modifyUsername}
         autofocus={false}
         initValue={currUsername || ""}
@@ -38,7 +38,7 @@ const Username = ({currUsername, error}) => {
 
 Username.propTypes = {
   currUsername: PropTypes.string,
-  error: PropTypes.string
+  active: PropTypes.bool.isRequired
 };
 
 export default Username;

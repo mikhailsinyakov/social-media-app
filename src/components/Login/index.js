@@ -2,10 +2,10 @@ import React, { Fragment, useState, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FirebaseContext } from "components/Firebase";
 
-import ByPhoneNumber from "./ByPhoneNumber";
+import WithPhoneNumber from "./WithPhoneNumber";
 import WithGoogle from "./WithGoogle";
 import WithGithub from "./WithGithub";
-import Modal from "shared/Modal";
+import ModalError from "shared/ModalError";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -24,13 +24,12 @@ const Login = () => {
 
   return (
     <Fragment>
-      <ByPhoneNumber />
+      <WithPhoneNumber />
       <WithGoogle />
       <WithGithub />
       {error && 
-        <Modal 
-          title={t("errorOccurred")}
-          description={error} 
+        <ModalError 
+          message={error} 
           close={() => setError(null)}
         />
       }

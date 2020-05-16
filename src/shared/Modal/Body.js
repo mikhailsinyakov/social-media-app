@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Description = styled.div`
+const Body = styled.div`
   border-bottom: 1px solid #d2c5c5;
   padding: 1rem;
   margin: 0;
@@ -9,4 +9,4 @@ const Description = styled.div`
   line-height: 1rem;
 `;
 
-export default Description;
+export default Body;

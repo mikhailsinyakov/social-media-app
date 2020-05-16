@@ -38,7 +38,6 @@ class Firebase {
         phoneNumber, 
         this.recaptchaVerifier
       );
-      return;
     } catch (e) {
       if (e.code === "auth/invalid-phone-number") {
         throw new Error("phoneNumberIsNotValid");
@@ -49,9 +48,27 @@ class Firebase {
   
   async confirmCode (code) {
     try {
-      return await this.confirmationResult.confirm(code);
+      await this.confirmationResult.confirm(code);
     } catch (e) {
-      throw new Error("badVerificationCode");
+      if (e.code === "auth/invalid-verification-code") {
+        throw new Error("badVerificationCode");
+      } else throw new Error("couldntLoginWithThisNumber");
+    }
+  }
+  
+  async linkPhoneNumber(code) {
+    const credential = app.auth.PhoneAuthProvider.credential(
+      this.confirmationResult.verificationId,
+      code
+    );
+    try {
+      await this.auth.currentUser.linkWithCredential(credential);
+    } catch (e) {
+      if (e.code === "auth/credential-already-in-use") {
+        throw new Error("phoneNumberAlreadyInUse");
+      } else if (e.code === "auth/invalid-verification-code") {
+        throw new Error("badVerificationCode");
+      } else throw new Error("couldntLinkThisNumber");
     }
   }
   
@@ -70,7 +87,6 @@ class Firebase {
   async updateUsername(username) {
     try {
       await this.auth.currentUser.updateProfile({ displayName: username });
-      return;
     } catch (e) {
       throw new Error("couldntUpdateUsername");
     }
@@ -102,7 +118,6 @@ class Firebase {
   async unlinkProvider(id) {
     try {
       await this.auth.currentUser.unlink(id);
-      return;
     } catch (e) {
       throw new Error("couldntUnlink");
     }

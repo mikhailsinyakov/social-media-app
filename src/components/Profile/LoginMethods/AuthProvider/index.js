@@ -13,23 +13,39 @@ const StyledLoader = styled(Loader)`
   right: -23px;
 `;
 
-const AuthProvider = ({id, name, userId, error, setError, className}) => {
+const AuthProvider = ({
+  id, 
+  name, 
+  userId, 
+  active, 
+  setError, 
+  unlinkForbidden, 
+  unlinked,
+  setLinkingPhoneNumber,
+  className
+}) => {
   const firebase = useContext(FirebaseContext);
   const { t } = useTranslation();
   
-  const [currUserId, setCurrUserId] = useState(userId);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const linkProvider = () => {
-    if (!error) firebase.linkProvider(id);
+    if (active) {
+      if (id === "phone") setLinkingPhoneNumber(true);
+      else firebase.linkProvider(id);
+    }
   };
   
   const unlinkProvider = async () => {
-    if (isSubmitting || error) return;
+    if (isSubmitting || !active) return;
+    if (unlinkForbidden) {
+      setError(t("unlinkForbidden"));
+      return;
+    }
     setIsSubmitting(true);
     try {
       await firebase.unlinkProvider(id);
-      setCurrUserId(null);
+      unlinked(id);
     }
     catch (e) {
       const provider = id === "phone" ? t("phoneNumber") : id;
@@ -39,7 +55,7 @@ const AuthProvider = ({id, name, userId, error, setError, className}) => {
     }
   };
 
-  if (!currUserId) {
+  if (!userId) {
     return (
       <div className={className}>
         <Name>{name}</Name>
@@ -52,7 +68,7 @@ const AuthProvider = ({id, name, userId, error, setError, className}) => {
   return (
     <div className={className}>
       <Name>{name}</Name>
-      <UserId className="linked">{currUserId}</UserId>
+      <UserId className="linked">{userId}</UserId>
       <Button className="linked" onClick={unlinkProvider}>
         {t("unlink")}
       </Button>
@@ -65,8 +81,11 @@ AuthProvider.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   userId: PropTypes.string,
-  error: PropTypes.string,
-  setError: PropTypes.func.isRequired
+  active: PropTypes.bool.isRequired,
+  setError: PropTypes.func.isRequired,
+  unlinkForbidden: PropTypes.bool.isRequired,
+  unlinked: PropTypes.func.isRequired,
+  setLinkingPhoneNumber: PropTypes.func.isRequired
 };
 
 const StyledAuthProvider = styled(AuthProvider)`

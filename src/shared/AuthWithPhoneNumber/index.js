@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import styled from "styled-components";
+import PropTypes from "prop-types";
 import PhoneNumberLib from "awesome-phonenumber";
 import { useTranslation } from "react-i18next";
 import { FirebaseContext } from "components/Firebase";
@@ -7,7 +7,7 @@ import HelpMessage from "shared/HelpMessage";
 import Form from "shared/Form";
 import Resend from "./Resend";
 
-const LogInByPhoneNumber = ({className}) => {
+const AuthWithPhoneNumber = ({type, onSuccess, className}) => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
   
@@ -39,13 +39,18 @@ const LogInByPhoneNumber = ({className}) => {
     setShowVerifyForm(true);
   };
   
+  const checkCode = async code => {
+    if (type === "login") await firebase.confirmCode(code);
+    else await firebase.linkPhoneNumber(code);
+    onSuccess(phoneNum);
+  }
+  
   useEffect(() => {
     firebase.createRecaptchaVerifier();
   }, [firebase]);
   
   return (
     <div className={className}>
-      <p>{t("loginByPhoneNumber")}</p>
       <HelpMessage>{t("loginByPhoneNumberMsg")}</HelpMessage>
       <Form
         type="tel"
@@ -58,8 +63,8 @@ const LogInByPhoneNumber = ({className}) => {
       <Form
         type="number"
         placeholder={t("smsCode")}
-        buttonName={t("login")}
-        action={code => firebase.confirmCode(code)}
+        buttonName={t(type)}
+        action={checkCode}
         show={showVerifyForm}
       />
       { showVerifyForm && <Resend onClick={sendSMS} /> }
@@ -68,11 +73,9 @@ const LogInByPhoneNumber = ({className}) => {
   );
 };
 
-const StyledComponent = styled(LogInByPhoneNumber)`
-  margin: 1rem 0;
-  text-align: center;
-  border-top: 1px solid #b3ab93;
-  border-bottom: 1px solid #b3ab93;
-`;
+AuthWithPhoneNumber.propTypes = {
+  type: PropTypes.string.isRequired,
+  onSuccess: PropTypes.func
+};
 
-export default StyledComponent;
+export default AuthWithPhoneNumber;
