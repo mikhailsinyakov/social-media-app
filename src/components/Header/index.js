@@ -5,6 +5,7 @@ import { FirebaseContext } from "components/Firebase";
 import { UserContext } from "components/User";
 import Button from "./Button";
 import Link from "./Link";
+import isUsernameValid from "helpers/isUsernameValid";
 
 const Header = ({ className }) => {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ const Header = ({ className }) => {
   return (
     <header className={className}>
       {
-        user.displayName && (
+        isUsernameValid(user.displayName) && (
           <Fragment>
             <Link to="/">{t("feed")}</Link>
             <Link to="/profile">{t("profile")}</Link>

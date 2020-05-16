@@ -9,6 +9,7 @@ import Loader from "shared/Loader";
 import LoginPage from "screens/Login";
 import FeedPage from "screens/Feed";
 import ProfilePage from "screens/Profile";
+import isUsernameValid from "helpers/isUsernameValid";
 
 const StyledLoader = styled(Loader)`
   margin: 5rem auto;
@@ -43,7 +44,7 @@ const App = () => {
               <ProfilePage />
             </Route>
             {
-              user.displayName ? (
+              isUsernameValid(user.displayName) ? (
                 <Route exact path="/">
                   <FeedPage />
                 </Route>

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { FirebaseContext } from "components/Firebase";
 import HelpMessage from "shared/HelpMessage";
 import Form from "shared/Form";
+import isUsernameValid from "helpers/isUsernameValid";
 
 const modifyUsername = value => {
   const newValue = "@" + value.replace(/\W/g, "").toLowerCase();
@@ -16,10 +17,12 @@ const modifyUsername = value => {
 const Username = ({currUsername, active}) => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
+  
+  const username = isUsernameValid(currUsername) ? currUsername : "";
 
   return (
     <Fragment>
-      {!currUsername && <HelpMessage>{t("needToAddUsername")}</HelpMessage>}
+      {!username && <HelpMessage>{t("needToAddUsername")}</HelpMessage>}
       <Form
         type="text"
         placeholder={t("username")}
@@ -27,10 +30,10 @@ const Username = ({currUsername, active}) => {
         action={username => active && firebase.updateUsername(username)}
         modifyValue={modifyUsername}
         autofocus={false}
-        initValue={currUsername || ""}
+        initValue={username}
         defaultMsg={t("usernameMinLength")}
         buttonNameSubmitted={t("saved")}
-        defaultSubmittedValue={currUsername || ""}
+        defaultSubmittedValue={username}
       />
     </Fragment>
   )
