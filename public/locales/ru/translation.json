@@ -38,5 +38,8 @@
   "linkPhoneNumber": "Привязать номер телефона",
   "couldntLinkThisNumber": "Не удалось привязать этот номер телефона",
   "couldntLoginWithThisNumber": "Не удалось войти через этот номер телефона",
-  "phoneNumberAlreadyInUse": "Номер телефона уже используется"
+  "phoneNumberAlreadyInUse": "Номер телефона уже используется",
+  "couldntChangePhoneNumber": "Не удалось изменить этот номер телефона",
+  "change": "Изменить",
+  "changePhoneNumber": "Изменить номер телефона"
 }

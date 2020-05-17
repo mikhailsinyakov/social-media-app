@@ -8,7 +8,7 @@ const LoginMethods = ({
   providers, 
   removeProvider, 
   setError, 
-  setLinkingPhoneNumber
+  checkPhoneNumber
 }) => {
   const { t } = useTranslation();
   
@@ -37,7 +37,7 @@ const LoginMethods = ({
             setError={setError}
             unlinkForbidden={providers.length < 2}
             unlinked={removeProvider}
-            setLinkingPhoneNumber={setLinkingPhoneNumber}
+            checkPhoneNumber={checkPhoneNumber}
             key={id} 
           />
         )
@@ -51,7 +51,7 @@ LoginMethods.propTypes = {
   providers: PropTypes.array.isRequired,
   removeProvider: PropTypes.func.isRequired,
   setError: PropTypes.func.isRequired,
-  setLinkingPhoneNumber: PropTypes.func.isRequired
+  checkPhoneNumber: PropTypes.func.isRequired
 };
 
 export default LoginMethods;

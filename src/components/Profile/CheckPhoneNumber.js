@@ -4,13 +4,15 @@ import { useTranslation } from "react-i18next";
 import Modal from "shared/Modal";
 import AuthWithPhoneNumber from "shared/AuthWithPhoneNumber";
 
-const CheckPhoneNumber = ({close, onSuccess}) => {
+const CheckPhoneNumber = ({type, close, onSuccess}) => {
   const { t } = useTranslation();
+  const title = type === "link" ? t("linkPhoneNumber") : t("changePhoneNumber");
+  
   return (
     <Modal 
       type="action"
-      title={t("linkPhoneNumber")}
-      body={<AuthWithPhoneNumber type="link" onSuccess={onSuccess} />}
+      title={title}
+      body={<AuthWithPhoneNumber type={type} onSuccess={onSuccess} />}
       close={close}
       closeBtnName={t("cancel")}
     />
@@ -18,6 +20,7 @@ const CheckPhoneNumber = ({close, onSuccess}) => {
 };
 
 CheckPhoneNumber.propTypes = {
+  type: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
   onSuccess: PropTypes.func.isRequired
 };

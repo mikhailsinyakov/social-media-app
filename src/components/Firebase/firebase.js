@@ -72,6 +72,22 @@ class Firebase {
     }
   }
   
+  async changePhoneNumber(code) {
+    const credential = app.auth.PhoneAuthProvider.credential(
+      this.confirmationResult.verificationId,
+      code
+    );
+    try {
+      await this.auth.currentUser.updatePhoneNumber(credential);
+    } catch (e) {
+      if (e.code === "auth/credential-already-in-use") {
+        throw new Error("phoneNumberAlreadyInUse");
+      } else if (e.code === "auth/invalid-verification-code") {
+        throw new Error("badVerificationCode");
+      } else throw new Error("couldntChangePhoneNumber");
+    }
+  }
+  
   onUserChanged(fn) {
     this.auth.onAuthStateChanged(fn);
   }

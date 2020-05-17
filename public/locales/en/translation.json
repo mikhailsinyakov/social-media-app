@@ -38,5 +38,8 @@
   "linkPhoneNumber": "Link phone number",
   "couldntLinkThisNumber": "Couldn't link this phone number",
   "couldntLoginWithThisNumber": "Couldn't log in with this phone number",
-  "phoneNumberAlreadyInUse": "Phone number is already in use"
+  "phoneNumberAlreadyInUse": "Phone number is already in use",
+  "couldntChangePhoneNumber": "Couldn't change phone number",
+  "change": "Change",
+  "changePhoneNumber": "Change phone number"
 }

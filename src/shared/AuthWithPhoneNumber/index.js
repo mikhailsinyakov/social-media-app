@@ -41,6 +41,7 @@ const AuthWithPhoneNumber = ({type, onSuccess, className}) => {
   
   const checkCode = async code => {
     if (type === "login") await firebase.confirmCode(code);
+    else if (type === "change") await firebase.changePhoneNumber(code);
     else await firebase.linkPhoneNumber(code);
     onSuccess(phoneNum);
   }

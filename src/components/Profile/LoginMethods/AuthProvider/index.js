@@ -21,7 +21,7 @@ const AuthProvider = ({
   setError, 
   unlinkForbidden, 
   unlinked,
-  setLinkingPhoneNumber,
+  checkPhoneNumber,
   className
 }) => {
   const firebase = useContext(FirebaseContext);
@@ -31,7 +31,7 @@ const AuthProvider = ({
   
   const linkProvider = () => {
     if (active) {
-      if (id === "phone") setLinkingPhoneNumber(true);
+      if (id === "phone") checkPhoneNumber("link");
       else firebase.linkProvider(id);
     }
   };
@@ -54,6 +54,12 @@ const AuthProvider = ({
       setIsSubmitting(false);
     }
   };
+  
+  const changePhoneNumber = () => {
+    if (active) checkPhoneNumber("change");
+  };
+  
+  const ableToChangePhoneNumber = id === "phone" && unlinkForbidden;
 
   if (!userId) {
     return (
@@ -69,8 +75,11 @@ const AuthProvider = ({
     <div className={className}>
       <Name>{name}</Name>
       <UserId className="linked">{userId}</UserId>
-      <Button className="linked" onClick={unlinkProvider}>
-        {t("unlink")}
+      <Button 
+        className="linked" 
+        onClick={ableToChangePhoneNumber ? changePhoneNumber :unlinkProvider}
+      >
+        {ableToChangePhoneNumber ? t("change") : t("unlink")}
       </Button>
       <StyledLoader size={25} show={isSubmitting} increaseSize={false} />
     </div>
@@ -85,7 +94,7 @@ AuthProvider.propTypes = {
   setError: PropTypes.func.isRequired,
   unlinkForbidden: PropTypes.bool.isRequired,
   unlinked: PropTypes.func.isRequired,
-  setLinkingPhoneNumber: PropTypes.func.isRequired
+  checkPhoneNumber: PropTypes.func.isRequired
 };
 
 const StyledAuthProvider = styled(AuthProvider)`

@@ -15,8 +15,9 @@ const Profile = ({className}) => {
   const [providers, setProviders] = useState(user.providerData);
   const [error, setError] = useState(null);
   
-  const [linkingPhoneNumber, setLinkingPhoneNumber] = useState(false);
-  const active = !error && !linkingPhoneNumber;
+  const [checkingPhoneNumber, setCheckingPhoneNumber] = useState(false);
+  const [checkingType, setCheckingType] = useState(null);
+  const active = !error && !checkingPhoneNumber;
   
   const removeProvider = id => {
     setProviders(providers.filter(data => data.providerId !== id));
@@ -26,9 +27,26 @@ const Profile = ({className}) => {
     setProviders([...providers, {providerId: "phone", uid: phoneNum} ]);
   };
   
+  const updatePhoneProvider = phoneNum => {
+    setProviders(providers.map(provider => 
+      provider.providerId === "phone" ? ({ ...provider, uid: phoneNum}) : provider
+    ));
+  };
+  
+  const checkPhoneNumber = type => {
+    setCheckingPhoneNumber(true);
+    setCheckingType(type);
+  };
+  
+  const stopCheckingPhoneNumber = () => {
+    setCheckingPhoneNumber(false);
+    setCheckingType(null);
+  };
+  
   const phoneNumberHasLinked = number => {
-    setLinkingPhoneNumber(false);
-    addPhoneProvider(number);
+    if (checkingType === "link") addPhoneProvider(number);
+    else updatePhoneProvider(number);
+    stopCheckingPhoneNumber();
   };
   
   useEffect(() => {
@@ -49,7 +67,7 @@ const Profile = ({className}) => {
         providers={providers}
         removeProvider={removeProvider}
         setError={setError} 
-        setLinkingPhoneNumber={setLinkingPhoneNumber}
+        checkPhoneNumber={checkPhoneNumber}
       />
       {error && 
         <ModalError 
@@ -57,9 +75,10 @@ const Profile = ({className}) => {
           close={() => setError(null)}
         />
       }
-      {linkingPhoneNumber &&
+      {checkingPhoneNumber &&
         <CheckPhoneNumber 
-          close={() => setLinkingPhoneNumber(false)} 
+          type={checkingType}
+          close={stopCheckingPhoneNumber} 
           onSuccess={phoneNumberHasLinked}
         />
       }
