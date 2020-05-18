@@ -9,7 +9,6 @@ import Loader from "shared/Loader";
 import LoginPage from "screens/Login";
 import FeedPage from "screens/Feed";
 import ProfilePage from "screens/Profile";
-import isUsernameValid from "helpers/isUsernameValid";
 
 const StyledLoader = styled(Loader)`
   margin: 5rem auto;
@@ -18,7 +17,7 @@ const StyledLoader = styled(Loader)`
 const App = () => {
   const { t, ready, i18n: { language } } = useTranslation();
   const firebase = useContext(FirebaseContext);
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   
   useEffect(() => { 
     if (ready) {
@@ -44,7 +43,7 @@ const App = () => {
               <ProfilePage />
             </Route>
             {
-              isUsernameValid(user.displayName) ? (
+              user.username ? (
                 <Route exact path="/">
                   <FeedPage />
                 </Route>

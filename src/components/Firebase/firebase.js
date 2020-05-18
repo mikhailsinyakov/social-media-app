@@ -32,6 +32,10 @@ class Firebase {
     );
   }
   
+  getCurrentUser() {
+    return this.auth.currentUser;
+  }
+  
   async sendSMSCode(phoneNumber) {
     try {
       this.confirmationResult = await this.auth.signInWithPhoneNumber(

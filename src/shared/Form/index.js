@@ -19,7 +19,8 @@ const Form = ({
   initValue = "",
   defaultMsg = "",
   buttonNameSubmitted = null,
-  defaultSubmittedValue = null
+  defaultSubmittedValue = null,
+  onSubmitSucceed = null
 }) => {
   const { t } = useTranslation();
   const inputEl = useRef(null);
@@ -75,6 +76,7 @@ const Form = ({
           setSubmittedValue(value);
           inputEl.current.blur();
         }
+        if (onSubmitSucceed) onSubmitSucceed();
       } catch (e) {
         setErrorMsg(t(e.message));
       } finally {
@@ -136,7 +138,8 @@ Form.propTypes = {
   initValue: PropTypes.string,
   defaultMsg: PropTypes.string,
   buttonNameSubmitted: PropTypes.string,
-  defaultSubmittedValue: PropTypes.string
+  defaultSubmittedValue: PropTypes.string,
+  onSubmitSucceed: PropTypes.func
 };
 
 const StyledForm = styled(Form)`

@@ -11,27 +11,12 @@ import CheckPhoneNumber from "./CheckPhoneNumber";
 const Profile = ({className}) => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
-  const user = useContext(UserContext);
-  const [providers, setProviders] = useState(user.providerData);
+  const { user, updateUser } = useContext(UserContext);
   const [error, setError] = useState(null);
   
   const [checkingPhoneNumber, setCheckingPhoneNumber] = useState(false);
   const [checkingType, setCheckingType] = useState(null);
   const active = !error && !checkingPhoneNumber;
-  
-  const removeProvider = id => {
-    setProviders(providers.filter(data => data.providerId !== id));
-  }; 
-  
-  const addPhoneProvider = phoneNum => {
-    setProviders([...providers, {providerId: "phone", uid: phoneNum} ]);
-  };
-  
-  const updatePhoneProvider = phoneNum => {
-    setProviders(providers.map(provider => 
-      provider.providerId === "phone" ? ({ ...provider, uid: phoneNum}) : provider
-    ));
-  };
   
   const checkPhoneNumber = type => {
     setCheckingPhoneNumber(true);
@@ -43,10 +28,9 @@ const Profile = ({className}) => {
     setCheckingType(null);
   };
   
-  const phoneNumberHasLinked = number => {
-    if (checkingType === "link") addPhoneProvider(number);
-    else updatePhoneProvider(number);
+  const phoneNumberHasChecked = () => {
     stopCheckingPhoneNumber();
+    updateUser();
   };
   
   useEffect(() => {
@@ -61,11 +45,10 @@ const Profile = ({className}) => {
 
   return (
     <div className={className}>
-      <Username currUsername={user.displayName} active={active} />
+      <Username currUsername={user.username} active={active} />
       <LoginMethods 
         active={active} 
-        providers={providers}
-        removeProvider={removeProvider}
+        providers={user.providerData}
         setError={setError} 
         checkPhoneNumber={checkPhoneNumber}
       />
@@ -79,7 +62,7 @@ const Profile = ({className}) => {
         <CheckPhoneNumber 
           type={checkingType}
           close={stopCheckingPhoneNumber} 
-          onSuccess={phoneNumberHasLinked}
+          onSuccess={phoneNumberHasChecked}
         />
       }
     </div>

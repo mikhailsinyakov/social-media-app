@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { FirebaseContext } from "components/Firebase";
+import { UserContext } from "components/User";
 import Name from "./Name";
 import UserId from "./UserId";
 import Button from "./Button";
@@ -20,11 +21,11 @@ const AuthProvider = ({
   active, 
   setError, 
   unlinkForbidden, 
-  unlinked,
   checkPhoneNumber,
   className
 }) => {
   const firebase = useContext(FirebaseContext);
+  const { updateUser } = useContext(UserContext);
   const { t } = useTranslation();
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,7 +46,7 @@ const AuthProvider = ({
     setIsSubmitting(true);
     try {
       await firebase.unlinkProvider(id);
-      unlinked(id);
+      updateUser();
     }
     catch (e) {
       const provider = id === "phone" ? t("phoneNumber") : id;
@@ -77,7 +78,7 @@ const AuthProvider = ({
       <UserId className="linked">{userId}</UserId>
       <Button 
         className="linked" 
-        onClick={ableToChangePhoneNumber ? changePhoneNumber :unlinkProvider}
+        onClick={ableToChangePhoneNumber ? changePhoneNumber : unlinkProvider}
       >
         {ableToChangePhoneNumber ? t("change") : t("unlink")}
       </Button>
@@ -93,7 +94,6 @@ AuthProvider.propTypes = {
   active: PropTypes.bool.isRequired,
   setError: PropTypes.func.isRequired,
   unlinkForbidden: PropTypes.bool.isRequired,
-  unlinked: PropTypes.func.isRequired,
   checkPhoneNumber: PropTypes.func.isRequired
 };
 

@@ -5,12 +5,11 @@ import { FirebaseContext } from "components/Firebase";
 import { UserContext } from "components/User";
 import Button from "./Button";
 import Link from "./Link";
-import isUsernameValid from "helpers/isUsernameValid";
 
 const Header = ({ className }) => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   
   const handleClick = e => {
     e.preventDefault();
@@ -20,7 +19,7 @@ const Header = ({ className }) => {
   return (
     <header className={className}>
       {
-        isUsernameValid(user.displayName) && (
+        user.username && (
           <Fragment>
             <Link to="/">{t("feed")}</Link>
             <Link to="/profile">{t("profile")}</Link>

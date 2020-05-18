@@ -6,7 +6,6 @@ import AuthProvider from "./AuthProvider";
 const LoginMethods = ({
   active, 
   providers, 
-  removeProvider, 
   setError, 
   checkPhoneNumber
 }) => {
@@ -36,7 +35,6 @@ const LoginMethods = ({
             active={active}
             setError={setError}
             unlinkForbidden={providers.length < 2}
-            unlinked={removeProvider}
             checkPhoneNumber={checkPhoneNumber}
             key={id} 
           />
@@ -49,7 +47,6 @@ const LoginMethods = ({
 LoginMethods.propTypes = {
   active: PropTypes.bool.isRequired,
   providers: PropTypes.array.isRequired,
-  removeProvider: PropTypes.func.isRequired,
   setError: PropTypes.func.isRequired,
   checkPhoneNumber: PropTypes.func.isRequired
 };
