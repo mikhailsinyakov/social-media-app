@@ -7,7 +7,7 @@ import HelpMessage from "shared/HelpMessage";
 import Form from "shared/Form";
 import Resend from "./Resend";
 
-const AuthWithPhoneNumber = ({type, onSuccess, className}) => {
+const AuthWithPhoneNumber = ({type, onSuccess, phoneNumber, className}) => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
   
@@ -34,7 +34,7 @@ const AuthWithPhoneNumber = ({type, onSuccess, className}) => {
   };
   
   const sendSMS = async () => {
-    await firebase.sendSMSCode(phoneNum);
+    await firebase.sendSMSCode(phoneNumber || phoneNum);
     setSubmittedPhoneNum(phoneNum);
     setShowVerifyForm(true);
   };
@@ -42,9 +42,13 @@ const AuthWithPhoneNumber = ({type, onSuccess, className}) => {
   const checkCode = async code => {
     if (type === "login") await firebase.confirmCode(code);
     else if (type === "change") await firebase.changePhoneNumber(code);
-    else await firebase.linkPhoneNumber(code);
-    onSuccess(phoneNum);
-  }
+    else if (type === "link") await firebase.linkPhoneNumber(code);
+    else if (type === "check") {
+      await firebase.reauthenticate(code);
+      await firebase.deleteAccount();
+    }
+    if (onSuccess) onSuccess(phoneNum);
+  };
   
   useEffect(() => {
     firebase.createRecaptchaVerifier();
@@ -60,6 +64,8 @@ const AuthWithPhoneNumber = ({type, onSuccess, className}) => {
         action={sendSMS}
         modifyValue={modifyPhoneNumber}
         defaultMsg={t("phoneNumberDefaultMsg")}
+        initValue={phoneNumber || ""}
+        disabled={!!phoneNumber}
       />
       <Form
         type="number"
@@ -76,7 +82,8 @@ const AuthWithPhoneNumber = ({type, onSuccess, className}) => {
 
 AuthWithPhoneNumber.propTypes = {
   type: PropTypes.string.isRequired,
-  onSuccess: PropTypes.func
+  onSuccess: PropTypes.func,
+  phoneNumber: PropTypes.string
 };
 
 export default AuthWithPhoneNumber;

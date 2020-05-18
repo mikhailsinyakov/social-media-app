@@ -6,7 +6,7 @@ import Body from "./Body";
 import Actions from "./Actions";
 import CloseButton from "./CloseButton";
 
-const Modal = ({type, title, body, close,closeBtnName, className}) => {
+const Modal = ({type, title, body, close, closeBtnName, className}) => {
   const elem = useRef(null);
 
   useEffect(() => {

@@ -7,7 +7,7 @@ const LoginMethods = ({
   active, 
   providers, 
   setError, 
-  checkPhoneNumber
+  setModal
 }) => {
   const { t } = useTranslation();
   
@@ -35,7 +35,7 @@ const LoginMethods = ({
             active={active}
             setError={setError}
             unlinkForbidden={providers.length < 2}
-            checkPhoneNumber={checkPhoneNumber}
+            setModal={setModal}
             key={id} 
           />
         )
@@ -48,7 +48,7 @@ LoginMethods.propTypes = {
   active: PropTypes.bool.isRequired,
   providers: PropTypes.array.isRequired,
   setError: PropTypes.func.isRequired,
-  checkPhoneNumber: PropTypes.func.isRequired
+  setModal: PropTypes.func.isRequired
 };
 
 export default LoginMethods;

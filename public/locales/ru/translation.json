@@ -41,5 +41,11 @@
   "phoneNumberAlreadyInUse": "Номер телефона уже используется",
   "couldntChangePhoneNumber": "Не удалось изменить этот номер телефона",
   "change": "Изменить",
-  "changePhoneNumber": "Изменить номер телефона"
+  "changePhoneNumber": "Изменить номер телефона",
+  "couldntCheckPhoneNumber": "Не удалось проверить номер телефона",
+  "couldntDeleteAccount": "Не удалось удалить аккаунт",
+  "deleteAccount": "Удалить аккаунт",
+  "youNeedToLinkPhoneNumber": "Для удаления аккаунта Вам нужно привязать номер телефона",
+  "checkPhoneNumber": "Проверить номер телефона",
+  "check": "Проверить"
 }

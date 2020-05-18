@@ -21,7 +21,7 @@ const AuthProvider = ({
   active, 
   setError, 
   unlinkForbidden, 
-  checkPhoneNumber,
+  setModal,
   className
 }) => {
   const firebase = useContext(FirebaseContext);
@@ -32,7 +32,7 @@ const AuthProvider = ({
   
   const linkProvider = () => {
     if (active) {
-      if (id === "phone") checkPhoneNumber("link");
+      if (id === "phone") setModal({type: "link" });
       else firebase.linkProvider(id);
     }
   };
@@ -57,7 +57,7 @@ const AuthProvider = ({
   };
   
   const changePhoneNumber = () => {
-    if (active) checkPhoneNumber("change");
+    if (active) setModal({ type: "change" });
   };
   
   const ableToChangePhoneNumber = id === "phone" && unlinkForbidden;
@@ -94,7 +94,7 @@ AuthProvider.propTypes = {
   active: PropTypes.bool.isRequired,
   setError: PropTypes.func.isRequired,
   unlinkForbidden: PropTypes.bool.isRequired,
-  checkPhoneNumber: PropTypes.func.isRequired
+  setModal: PropTypes.func.isRequired
 };
 
 const StyledAuthProvider = styled(AuthProvider)`

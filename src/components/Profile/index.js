@@ -5,6 +5,7 @@ import { FirebaseContext } from "components/Firebase";
 import { UserContext } from "components/User";
 import Username from "./Username";
 import LoginMethods from "./LoginMethods";
+import DeleteAccount from "./DeleteAccount";
 import ModalError from "shared/ModalError";
 import CheckPhoneNumber from "./CheckPhoneNumber";
 
@@ -12,26 +13,19 @@ const Profile = ({className}) => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
   const { user, updateUser } = useContext(UserContext);
+  
   const [error, setError] = useState(null);
+  const [modal, setModal] = useState(null);
   
-  const [checkingPhoneNumber, setCheckingPhoneNumber] = useState(false);
-  const [checkingType, setCheckingType] = useState(null);
-  const active = !error && !checkingPhoneNumber;
-  
-  const checkPhoneNumber = type => {
-    setCheckingPhoneNumber(true);
-    setCheckingType(type);
-  };
-  
-  const stopCheckingPhoneNumber = () => {
-    setCheckingPhoneNumber(false);
-    setCheckingType(null);
-  };
+  const active = !error && !modal;
   
   const phoneNumberHasChecked = () => {
-    stopCheckingPhoneNumber();
+    setModal(null);
     updateUser();
   };
+  
+  const phoneProvider = user.providerData.filter(p => p.providerId === "phone")[0];
+  const phoneNumber = phoneProvider && phoneProvider.uid;
   
   useEffect(() => {
     (async () => {
@@ -50,7 +44,12 @@ const Profile = ({className}) => {
         active={active} 
         providers={user.providerData}
         setError={setError} 
-        checkPhoneNumber={checkPhoneNumber}
+        setModal={setModal}
+      />
+      <DeleteAccount 
+        active={active} 
+        setError={setError} 
+        setModal={setModal} 
       />
       {error && 
         <ModalError 
@@ -58,12 +57,19 @@ const Profile = ({className}) => {
           close={() => setError(null)}
         />
       }
-      {checkingPhoneNumber &&
-        <CheckPhoneNumber 
-          type={checkingType}
-          close={stopCheckingPhoneNumber} 
-          onSuccess={phoneNumberHasChecked}
-        />
+      {modal && (
+        modal.type === "check" ?
+          <CheckPhoneNumber 
+            type={modal.type}
+            close={() => setModal(null)} 
+            phoneNumber={phoneNumber}
+          /> :
+          <CheckPhoneNumber 
+            type={modal.type}
+            close={() => setModal(null)} 
+            onSuccess={phoneNumberHasChecked}
+          />
+        )
       }
     </div>
   );

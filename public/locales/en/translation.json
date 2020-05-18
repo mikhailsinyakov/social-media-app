@@ -41,5 +41,11 @@
   "phoneNumberAlreadyInUse": "Phone number is already in use",
   "couldntChangePhoneNumber": "Couldn't change phone number",
   "change": "Change",
-  "changePhoneNumber": "Change phone number"
+  "changePhoneNumber": "Change phone number",
+  "couldntCheckPhoneNumber": "Couldn't check phone number",
+  "couldntDeleteAccount": "Couldn't delete account",
+  "deleteAccount": "Delete account",
+  "youNeedToLinkPhoneNumber": "You need to link a phone number to delete the account",
+  "checkPhoneNumber": "Check phone number",
+  "check": "Check"
 }

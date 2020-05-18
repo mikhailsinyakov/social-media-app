@@ -66,7 +66,7 @@ class Firebase {
       code
     );
     try {
-      await this.auth.currentUser.linkWithCredential(credential);
+      await this.getCurrentUser().linkWithCredential(credential);
     } catch (e) {
       if (e.code === "auth/credential-already-in-use") {
         throw new Error("phoneNumberAlreadyInUse");
@@ -82,13 +82,27 @@ class Firebase {
       code
     );
     try {
-      await this.auth.currentUser.updatePhoneNumber(credential);
+      await this.getCurrentUser().updatePhoneNumber(credential);
     } catch (e) {
       if (e.code === "auth/credential-already-in-use") {
         throw new Error("phoneNumberAlreadyInUse");
       } else if (e.code === "auth/invalid-verification-code") {
         throw new Error("badVerificationCode");
       } else throw new Error("couldntChangePhoneNumber");
+    }
+  }
+  
+  async reauthenticate(code) {
+    const credential = app.auth.PhoneAuthProvider.credential(
+      this.confirmationResult.verificationId,
+      code
+    );
+    try {
+      await this.getCurrentUser().reauthenticateWithCredential(credential);
+    } catch (e) {
+      if (e.code === "auth/invalid-verification-code") {
+        throw new Error("badVerificationCode");
+      } else throw new Error("couldntCheckPhoneNumber");
     }
   }
   
@@ -106,7 +120,7 @@ class Firebase {
   
   async updateUsername(username) {
     try {
-      await this.auth.currentUser.updateProfile({ displayName: username });
+      await this.getCurrentUser().updateProfile({ displayName: username });
     } catch (e) {
       throw new Error("couldntUpdateUsername");
     }
@@ -114,7 +128,7 @@ class Firebase {
   
   linkProvider(id) {
     const provider = this.providers[id];
-    this.auth.currentUser.linkWithRedirect(provider);
+    this.getCurrentUser().linkWithRedirect(provider);
   }
   
   getRedirectResult() {
@@ -137,7 +151,7 @@ class Firebase {
   
   async unlinkProvider(id) {
     try {
-      await this.auth.currentUser.unlink(id);
+      await this.getCurrentUser().unlink(id);
     } catch (e) {
       throw new Error("couldntUnlink");
     }
@@ -149,6 +163,16 @@ class Firebase {
   
   loginWithGithub() {
     this.auth.signInWithRedirect(this.githubProvider);
+  }
+  
+  async deleteAccount() {
+    try {
+      await this.getCurrentUser().delete();
+    } catch (e) {
+      if (e.code === "auth/requires-recent-login") {
+        throw new Error("Requires recent login");
+      } else throw new Error("couldntDeleteAccount");
+    }
   }
 }
  

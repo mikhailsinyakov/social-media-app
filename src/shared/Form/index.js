@@ -20,7 +20,8 @@ const Form = ({
   defaultMsg = "",
   buttonNameSubmitted = null,
   defaultSubmittedValue = null,
-  onSubmitSucceed = null
+  onSubmitSucceed = null,
+  disabled = false
 }) => {
   const { t } = useTranslation();
   const inputEl = useRef(null);
@@ -112,6 +113,7 @@ const Form = ({
         onChange={updateValue}
         onKeyDown={e => e.key === "Enter" && submit()} 
         placeholder={placeholder}
+        disabled={disabled}
         ref={inputEl}
       />
       <Button 
@@ -139,7 +141,8 @@ Form.propTypes = {
   defaultMsg: PropTypes.string,
   buttonNameSubmitted: PropTypes.string,
   defaultSubmittedValue: PropTypes.string,
-  onSubmitSucceed: PropTypes.func
+  onSubmitSucceed: PropTypes.func,
+  unChangedValue: PropTypes.string
 };
 
 const StyledForm = styled(Form)`
