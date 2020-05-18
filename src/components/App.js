@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { compose } from "recompose";
@@ -13,6 +13,19 @@ import ProfilePage from "screens/Profile";
 const StyledLoader = styled(Loader)`
   margin: 5rem auto;
 `;
+
+const CustomRoute = ({children, user, ...rest}) => (
+  <Route 
+    {...rest}
+    render={({location}) => 
+      user ? 
+        user.username ? 
+          location.pathname === "/login" ? <Redirect to="/" /> : children :
+          location.pathname === "/profile" ? children : <Redirect to="/profile" /> :
+        location.pathname === "/login" ? children : <Redirect to="/login" />
+    }
+  />
+);
 
 const App = () => {
   const { t, ready, i18n: { language } } = useTranslation();
@@ -33,34 +46,15 @@ const App = () => {
   
   return (
     <Router>
-      {
-        user ? (
-          <Switch>
-            <Route exact path="/login">
-              <Redirect to="/" />
-            </Route>
-            <Route exact path="/profile">
-              <ProfilePage />
-            </Route>
-            {
-              user.username ? (
-                <Route exact path="/">
-                  <FeedPage />
-                </Route>
-              ) : <Redirect to="/profile" />
-            }
-          </Switch>
-          ) : (
-            <Switch>
-              <Route exact path="/login">
-                <LoginPage />
-              </Route>
-              <Route>
-                <Redirect to="/login" />
-              </Route>
-            </Switch>
-          )
-      }
+      <CustomRoute user={user} exact path="/login">
+        <LoginPage />
+      </CustomRoute>
+      <CustomRoute user={user} exact path="/">
+        <FeedPage />
+      </CustomRoute>
+      <CustomRoute user={user} exact path="/profile">
+        <ProfilePage />
+      </CustomRoute>
     </Router>
   );
 };
