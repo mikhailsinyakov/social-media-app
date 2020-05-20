@@ -1,11 +1,9 @@
 import styled from "styled-components";
 
 const Button = styled.button`
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
-  
   padding: 0.5rem;
-  background-color: #ebebe4;
   border: none;
+  background-color: #ebebe4;
   font-family: 'Baloo 2',cursive;
   border-radius: 0.3rem;
   font-size: 0.8rem;

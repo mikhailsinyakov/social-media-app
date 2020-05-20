@@ -28,6 +28,7 @@
   "errorOccurred": "Произошла ошибка",
   "couldntUnlink": "Не удалось отвязать",
   "couldntLink": "Не удалось привязать",
+  "couldntLoginWith": "Не удалось войти через",
   "credentialsAlreadyInUse": "Эти учетные данные уже связаны с другим аккаунтом",
   "emailAlreadyInUse": "Электронная почта уже связана с другим аккаунтом",
   "signInWithGoogle": "Войти через Google",

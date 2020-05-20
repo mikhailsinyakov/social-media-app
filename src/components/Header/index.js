@@ -1,8 +1,10 @@
-import React, { Fragment, useContext } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { FirebaseContext } from "components/Firebase";
-import { UserContext } from "components/User";
+
+import { FirebaseContext } from "context/Firebase";
+import { UserContext } from "context/User";
+
 import Button from "./Button";
 import Link from "./Link";
 
@@ -13,17 +15,17 @@ const Header = ({ className }) => {
   
   const handleClick = e => {
     e.preventDefault();
-    firebase.logOut();
+    firebase.auth.logOut();
   };
   
   return (
     <header className={className}>
       {
         user.username && (
-          <Fragment>
+          <>
             <Link to="/">{t("feed")}</Link>
             <Link to="/profile">{t("profile")}</Link>
-          </Fragment>
+          </>
         )
       }
       <Button onClick={handleClick}>{t("logOut")}</Button>

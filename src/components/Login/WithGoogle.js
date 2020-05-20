@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { FirebaseContext } from "components/Firebase";
+import { FirebaseContext } from "context/Firebase";
 
 const WithGoogle = ({className}) => {
   const firebase = useContext(FirebaseContext);
@@ -15,7 +15,7 @@ const WithGoogle = ({className}) => {
   return (
     <button 
       className={className} 
-      onClick={() => firebase.loginWithGoogle()}
+      onClick={() => firebase.auth.loginWithGoogle()}
       onFocus={() => changeImg("focus")}
       onBlur={() => changeImg("normal")}
     >

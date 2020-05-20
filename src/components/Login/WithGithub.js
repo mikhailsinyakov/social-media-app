@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { FirebaseContext } from "components/Firebase";
+import { FirebaseContext } from "context/Firebase";
 import { useTranslation } from "react-i18next";
 
 const Logo = styled.img`
@@ -14,7 +14,7 @@ const WithGithub = ({className}) => {
   const { t } = useTranslation();
 
   return (
-    <button className={className} onClick={() => firebase.loginWithGithub()}>
+    <button className={className} onClick={() => firebase.auth.loginWithGithub()}>
       <Logo 
         src="img/logos/github.png" 
         alt="github-logo" 

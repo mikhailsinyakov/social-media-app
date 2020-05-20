@@ -2,7 +2,8 @@ import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import PhoneNumberLib from "awesome-phonenumber";
 import { useTranslation } from "react-i18next";
-import { FirebaseContext } from "components/Firebase";
+
+import { FirebaseContext } from "context/Firebase";
 import HelpMessage from "shared/HelpMessage";
 import Form from "shared/Form";
 import Resend from "./Resend";
@@ -34,24 +35,24 @@ const AuthWithPhoneNumber = ({type, onSuccess, phoneNumber, className}) => {
   };
   
   const sendSMS = async () => {
-    await firebase.sendSMSCode(phoneNumber || phoneNum);
+    await firebase.auth.sendSMSCode(phoneNumber || phoneNum);
     setSubmittedPhoneNum(phoneNum);
     setShowVerifyForm(true);
   };
   
   const checkCode = async code => {
-    if (type === "login") await firebase.confirmCode(code);
-    else if (type === "change") await firebase.changePhoneNumber(code);
-    else if (type === "link") await firebase.linkPhoneNumber(code);
+    if (type === "login") await firebase.auth.loginWithPhoneNumber(code);
+    else if (type === "change") await firebase.auth.changePhoneNumber(code);
+    else if (type === "link") await firebase.auth.linkPhoneNumber(code);
     else if (type === "check") {
-      await firebase.reauthenticate(code);
-      await firebase.deleteAccount();
+      await firebase.auth.reauthenticate(code);
+      await firebase.auth.deleteAccount();
     }
     if (onSuccess) onSuccess(phoneNum);
   };
   
   useEffect(() => {
-    firebase.createRecaptchaVerifier();
+    firebase.auth.createRecaptchaVerifier();
   }, [firebase]);
   
   return (

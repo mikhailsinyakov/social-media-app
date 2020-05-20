@@ -2,8 +2,14 @@ import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import { FirebaseContext } from "components/Firebase";
-import { UserContext } from "components/User";
+
+import { FirebaseContext } from "context/Firebase";
+import { UserContext } from "context/User";
+import { ModalContext } from "context/Modal";
+import ErrorModal from "shared/Modals/ErrorModal";
+import PhoneNumberModal from "shared/Modals/PhoneNumberModal";
+import AuthWithPhoneNumber from "shared/AuthWithPhoneNumber";
+
 import Name from "./Name";
 import UserId from "./UserId";
 import Button from "./Button";
@@ -18,56 +24,73 @@ const AuthProvider = ({
   id, 
   name, 
   userId, 
-  active, 
-  setError, 
   unlinkForbidden, 
-  setModal,
   className
 }) => {
   const firebase = useContext(FirebaseContext);
   const { updateUser } = useContext(UserContext);
+  const { Modal, setModal } = useContext(ModalContext);
   const { t } = useTranslation();
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const linkProvider = () => {
-    if (active) {
-      if (id === "phone") setModal({type: "link" });
-      else firebase.linkProvider(id);
+  const onSuccessChangePhoneNumber = () => {
+    setModal(null);
+    updateUser();
+  };
+  
+  const updatePhoneNumber = action => {
+    if (!Modal) {
+      setModal(
+        <PhoneNumberModal 
+          title={
+            action === "change" ? t("changePhoneNumber") : t("linkPhoneNumber")
+          }
+        >
+          <AuthWithPhoneNumber 
+            type={action}  
+            onSuccess={onSuccessChangePhoneNumber} 
+          />
+        </PhoneNumberModal>
+      );
     }
   };
   
+  const linkProvider = () => {
+    if (!Modal) firebase.auth.linkProvider(id);
+  };
+  
   const unlinkProvider = async () => {
-    if (isSubmitting || !active) return;
+    if (isSubmitting || Modal) return;
     if (unlinkForbidden) {
-      setError(t("unlinkForbidden"));
+      setModal(<ErrorModal>{t("unlinkForbidden")}</ErrorModal>);
       return;
     }
     setIsSubmitting(true);
     try {
-      await firebase.unlinkProvider(id);
+      await firebase.auth.unlinkProvider(id);
       updateUser();
     }
     catch (e) {
       const provider = id === "phone" ? t("phoneNumber") : id;
-      setError(`${t(e.message)} "${provider}"`);
+      setModal(<ErrorModal>{`${t(e.message)} "${provider}"`}</ErrorModal>);
     } finally {
       setIsSubmitting(false);
     }
   };
-  
-  const changePhoneNumber = () => {
-    if (active) setModal({ type: "change" });
-  };
-  
-  const ableToChangePhoneNumber = id === "phone" && unlinkForbidden;
 
   if (!userId) {
     return (
       <div className={className}>
         <Name>{name}</Name>
         <UserId>{t("notLinked")}</UserId>
-        <Button onClick={linkProvider}>{t("link")}</Button>
+        <Button 
+          onClick={
+            id === "phone" ? () => updatePhoneNumber("link") : linkProvider
+          }
+        >
+          {t("link")}
+        </Button>
       </div>
     );
   }
@@ -78,11 +101,15 @@ const AuthProvider = ({
       <UserId className="linked">{userId}</UserId>
       <Button 
         className="linked" 
-        onClick={ableToChangePhoneNumber ? changePhoneNumber : unlinkProvider}
+        onClick={
+          id === "phone" && unlinkForbidden ? 
+            () => updatePhoneNumber("change") : 
+            unlinkProvider
+        }
       >
-        {ableToChangePhoneNumber ? t("change") : t("unlink")}
+        {id === "phone" && unlinkForbidden ? t("change") : t("unlink")}
       </Button>
-      <StyledLoader size={25} show={isSubmitting} increaseSize={false} />
+      <StyledLoader size={25} show={isSubmitting} expand={false} />
     </div>
   );
 };
@@ -91,10 +118,7 @@ AuthProvider.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   userId: PropTypes.string,
-  active: PropTypes.bool.isRequired,
-  setError: PropTypes.func.isRequired,
-  unlinkForbidden: PropTypes.bool.isRequired,
-  setModal: PropTypes.func.isRequired
+  unlinkForbidden: PropTypes.bool.isRequired
 };
 
 const StyledAuthProvider = styled(AuthProvider)`

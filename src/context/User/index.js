@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import UserContext from "./context";
-import { FirebaseContext } from "components/Firebase";
+import { FirebaseContext } from "context/Firebase";
 
 const isUsernameValid = value => {
   if (!value) return false;
@@ -27,12 +27,12 @@ const withUserContext = Component => props => {
   }, [setUser]);
   
   useEffect(() => {
-    firebase.onUserChanged(updateUser);
+    firebase.auth.onUserChanged(updateUser);
   }, [firebase, updateUser]);
   
   return (
     <UserContext.Provider 
-      value={{user, updateUser: () => updateUser(firebase.getCurrentUser())}}
+      value={{user, updateUser: () => updateUser(firebase.auth.getCurrentUser())}}
     >
       <Component {...props} />
     </UserContext.Provider>

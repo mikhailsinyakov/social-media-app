@@ -1,25 +1,43 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
-import { FirebaseContext } from "components/Firebase";
-import { UserContext } from "components/User";
 import { useTranslation } from "react-i18next";
 
-const DeleteAccount = ({active, setError, setModal, className}) => {
+import { FirebaseContext } from "context/Firebase";
+import { UserContext } from "context/User";
+import { ModalContext } from "context/Modal";
+
+import ErrorModal from "shared/Modals/ErrorModal";
+import PhoneNumberModal from "shared/Modals/PhoneNumberModal";
+import AuthWithPhoneNumber from "shared/AuthWithPhoneNumber";
+
+const DeleteAccount = ({className}) => {
   const firebase = useContext(FirebaseContext);
   const { user } = useContext(UserContext);
+  const { Modal, setModal } = useContext(ModalContext);
   const { t } = useTranslation();
   
+  const phoneProvider = user.providerData.filter(p => p.providerId === "phone")[0];
+  const phoneNumber = phoneProvider && phoneProvider.uid;
+  
   const deleteAccount = async () => {
-    if (!active) return;
+    if (Modal) return;
     try {
-      await firebase.deleteAccount();
+      await firebase.auth.deleteAccount();
     } catch (e) {
       if (e.message === "Requires recent login") {
         if (user.providerData.find(provider => provider.providerId === "phone")) {
-          setModal({ type: "check" });
-        } else setError(t("youNeedToLinkPhoneNumber"));
-      } else setError(e.message);
+          setModal(
+            <PhoneNumberModal title={t("checkPhoneNumber")}>
+              <AuthWithPhoneNumber 
+                type={"check"}  
+                phoneNumber={phoneNumber} 
+              />
+            </PhoneNumberModal>
+          );
+        } else {
+          setModal(<ErrorModal>{t("youNeedToLinkPhoneNumber")}</ErrorModal>);
+        }
+      } else setModal(<ErrorModal>t(e.message)</ErrorModal>);
     }
   }; 
 
@@ -28,12 +46,6 @@ const DeleteAccount = ({active, setError, setModal, className}) => {
       {t("deleteAccount")}
     </button>
   );
-};
-
-DeleteAccount.propTypes = {
-  active: PropTypes.bool.isRequired,
-  setError: PropTypes.func.isRequired,
-  setModal: PropTypes.func.isRequired
 };
 
 const StyledDeleteAccount = styled(DeleteAccount)`

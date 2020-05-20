@@ -1,51 +1,66 @@
 import React, { useEffect, useContext } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { compose } from "recompose";
-import { FirebaseContext, withFirebaseContext } from "./Firebase";
-import { UserContext, withUserContext } from "./User";
+
+import { FirebaseContext, withFirebaseContext } from "context/Firebase";
+import { UserContext, withUserContext } from "context/User";
+import { ModalContext, withModalContext } from "context/Modal";
+
+import CustomRoute from "./CustomRoute";
 import Loader from "shared/Loader";
 import LoginPage from "screens/Login";
 import FeedPage from "screens/Feed";
 import ProfilePage from "screens/Profile";
 
+import ErrorModal from "shared/Modals/ErrorModal";
+
 const StyledLoader = styled(Loader)`
   margin: 5rem auto;
 `;
 
-const CustomRoute = ({children, user, ...rest}) => (
-  <Route 
-    {...rest}
-    render={({location}) => 
-      user ? 
-        user.username ? 
-          location.pathname === "/login" ? <Redirect to="/" /> : children :
-          location.pathname === "/profile" ? children : <Redirect to="/profile" /> :
-        location.pathname === "/login" ? children : <Redirect to="/login" />
-    }
-  />
-);
-
 const App = () => {
   const { t, ready, i18n: { language } } = useTranslation();
+  const location = useLocation();
+  
   const firebase = useContext(FirebaseContext);
   const { user } = useContext(UserContext);
+  const { Modal, setModal } = useContext(ModalContext);
   
   useEffect(() => { 
     if (ready) {
       window.document.documentElement.lang = language;
       window.document.title = t("appName");
-      firebase.setLanguage(language);
+      firebase.auth.setLanguage(language);
     }
    }, [t, language, ready, firebase]);
+   
+   useEffect(() => {
+    if (location.pathname === "/login" || location.pathname === "/profile") {
+      (async () => {
+        const result = await firebase.auth.getRedirectResult();
+        if (result.outcome === "failure") {
+          const { providerId, cause } = result;
+          const notCompletedAction = location.pathname === "/login" ? 
+                                      t("couldntLoginWith") : 
+                                      t("couldntLink");
+          setModal(
+            <ErrorModal>
+              {`${notCompletedAction} ${providerId}. ${t(cause)}`}
+            </ErrorModal>
+          );
+        }
+      })();
+    }
+  }, [t, firebase, setModal, location]);
   
   if (!ready || user === undefined) {
     return <StyledLoader size={50} show={true} />;
   }
   
   return (
-    <Router>
+    <>
       <CustomRoute user={user} exact path="/login">
         <LoginPage />
       </CustomRoute>
@@ -55,8 +70,9 @@ const App = () => {
       <CustomRoute user={user} exact path="/profile">
         <ProfilePage />
       </CustomRoute>
-    </Router>
+      {Modal}
+    </>
   );
 };
 
-export default compose(withFirebaseContext, withUserContext)(App);
+export default compose(withModalContext, withFirebaseContext, withUserContext)(App);

@@ -1,8 +1,10 @@
-import React, { Fragment, useContext } from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { FirebaseContext } from "components/Firebase";
-import { UserContext } from "components/User";
+
+import { FirebaseContext } from "context/Firebase";
+import { UserContext } from "context/User";
+import { ModalContext } from "context/Modal";
+
 import HelpMessage from "shared/HelpMessage";
 import Form from "shared/Form";
 
@@ -14,19 +16,20 @@ const modifyUsername = value => {
   };
 };
 
-const Username = ({currUsername, active}) => {
+const Username = () => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
-  const { updateUser } = useContext(UserContext);
+  const { user: {username: currUsername}, updateUser } = useContext(UserContext);
+  const { Modal } = useContext(ModalContext);
 
   return (
-    <Fragment>
+    <>
       {!currUsername && <HelpMessage>{t("needToAddUsername")}</HelpMessage>}
       <Form
         type="text"
         placeholder={t("username")}
         buttonName={t("save")}
-        action={username => active && firebase.updateUsername(username)}
+        action={username => !Modal && firebase.auth.updateUsername(username)}
         modifyValue={modifyUsername}
         autofocus={false}
         initValue={currUsername || ""}
@@ -35,13 +38,8 @@ const Username = ({currUsername, active}) => {
         defaultSubmittedValue={currUsername || ""}
         onSubmitSucceed={() => updateUser()}
       />
-    </Fragment>
+    </>
   )
-};
-
-Username.propTypes = {
-  currUsername: PropTypes.string,
-  active: PropTypes.bool.isRequired
 };
 
 export default Username;

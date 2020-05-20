@@ -16,7 +16,7 @@ const Loader = styled.div`
     100% { transform: rotate(360deg); }
   }
   
-  ${({increaseSize, size}) => (increaseSize === undefined || increaseSize) && 
+  ${({expand, size}) => (expand === undefined || expand) && 
     `
       @media screen and (min-width: 400px) {
         border: ${size / 7.5}px solid #f3f3f3;

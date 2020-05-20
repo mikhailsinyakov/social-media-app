@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import withHeaderAndFooter from "./withHeaderAndFooter";
 import { useTranslation } from "react-i18next";
+
+import withHeaderAndFooter from "./withHeaderAndFooter";
 import Profile from "components/Profile";
 
 const ProfilePage = ({className}) => {
@@ -18,7 +19,6 @@ const ProfilePage = ({className}) => {
 }
   
 const StyledProfilePage = styled(ProfilePage)`
-  position: relative;
   border: 1px solid #d8c9c9;
   margin: 2rem 1rem;
   padding: 1rem;

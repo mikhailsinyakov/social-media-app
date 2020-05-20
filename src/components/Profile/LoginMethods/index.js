@@ -1,15 +1,14 @@
-import React, { Fragment } from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
+
+import { UserContext } from "context/User";
 import AuthProvider from "./AuthProvider";
 
-const LoginMethods = ({
-  active, 
-  providers, 
-  setError, 
-  setModal
-}) => {
+const LoginMethods = () => {
   const { t } = useTranslation();
+  const { user } = useContext(UserContext);
+  
+  const providers = user.providerData;
   
   const getUserId = providerId => {
     const provider = providers.filter(data => 
@@ -24,7 +23,7 @@ const LoginMethods = ({
   ];
   
   return (
-    <Fragment>
+    <>
       <h4>{t("loginMethods")}</h4>
       {
         authProviders.map(({id, name}) => 
@@ -32,23 +31,13 @@ const LoginMethods = ({
             id={id} 
             name={name} 
             userId={getUserId(id)} 
-            active={active}
-            setError={setError}
             unlinkForbidden={providers.length < 2}
-            setModal={setModal}
             key={id} 
           />
         )
       }
-    </Fragment>
+    </>
   );
-};
-
-LoginMethods.propTypes = {
-  active: PropTypes.bool.isRequired,
-  providers: PropTypes.array.isRequired,
-  setError: PropTypes.func.isRequired,
-  setModal: PropTypes.func.isRequired
 };
 
 export default LoginMethods;

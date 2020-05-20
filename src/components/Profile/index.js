@@ -1,79 +1,17 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useTranslation } from "react-i18next";
-import { FirebaseContext } from "components/Firebase";
-import { UserContext } from "components/User";
+
 import Username from "./Username";
 import LoginMethods from "./LoginMethods";
 import DeleteAccount from "./DeleteAccount";
-import ModalError from "shared/ModalError";
-import CheckPhoneNumber from "./CheckPhoneNumber";
 
-const Profile = ({className}) => {
-  const { t } = useTranslation();
-  const firebase = useContext(FirebaseContext);
-  const { user, updateUser } = useContext(UserContext);
-  
-  const [error, setError] = useState(null);
-  const [modal, setModal] = useState(null);
-  
-  const active = !error && !modal;
-  
-  const phoneNumberHasChecked = () => {
-    setModal(null);
-    updateUser();
-  };
-  
-  const phoneProvider = user.providerData.filter(p => p.providerId === "phone")[0];
-  const phoneNumber = phoneProvider && phoneProvider.uid;
-  
-  useEffect(() => {
-    (async () => {
-      const result = await firebase.getRedirectResult();
-      if (result.outcome === "failure") {
-        const { providerId, cause } = result;
-        setError(`${t("couldntLink")} ${providerId}. ${t(cause)}`);
-      }
-    })();
-  }, [t, firebase]);
-
-  return (
-    <div className={className}>
-      <Username currUsername={user.username} active={active} />
-      <LoginMethods 
-        active={active} 
-        providers={user.providerData}
-        setError={setError} 
-        setModal={setModal}
-      />
-      <DeleteAccount 
-        active={active} 
-        setError={setError} 
-        setModal={setModal} 
-      />
-      {error && 
-        <ModalError 
-          message={error} 
-          close={() => setError(null)}
-        />
-      }
-      {modal && (
-        modal.type === "check" ?
-          <CheckPhoneNumber 
-            type={modal.type}
-            close={() => setModal(null)} 
-            phoneNumber={phoneNumber}
-          /> :
-          <CheckPhoneNumber 
-            type={modal.type}
-            close={() => setModal(null)} 
-            onSuccess={phoneNumberHasChecked}
-          />
-        )
-      }
-    </div>
-  );
-};
+const Profile = ({className}) => (
+  <div className={className}>
+    <Username />
+    <LoginMethods />
+    <DeleteAccount />
+  </div>
+);
 
 const StyledProfile = styled(Profile)`
   margin: 1rem 0;

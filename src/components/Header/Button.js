@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
 const Button = styled.button`
-  text-decoration: none;
   padding: 0.5rem;
   border: none;
   background-color: transparent;
-  font: inherit;
   cursor: pointer;
+  font: inherit;
   color: #051fcf;
+  text-decoration: none;
   
   &:hover {
     text-decoration: underline;
