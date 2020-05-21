@@ -31,11 +31,13 @@ const Resend = ({onClick, className}) => {
 }
 
 Resend.propTypes = {
+  show: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired
 };
 
 const StyledResend = styled(Resend)`
   font-size: 0.8rem;
+  opacity: ${({show}) => show ? "1" : "0"};
 `;
 
 export default StyledResend;

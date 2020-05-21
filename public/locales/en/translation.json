@@ -51,5 +51,6 @@
   "check": "Check",
   "yes": "Yes",
   "deletingAccount": "Deleting account",
-  "deletingAccountConfirm": "Are you sure you want to delete your account?"
+  "deletingAccountConfirm": "Are you sure you want to delete your account?",
+  "editProfile": "Edit profile"
 }

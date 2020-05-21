@@ -1,23 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { useTranslation } from "react-i18next";
 
 import withHeaderAndFooter from "./withHeaderAndFooter";
 import Profile from "components/Profile";
 
-const ProfilePage = ({className}) => {
-  const { t } = useTranslation();
-  
-  return (
-    <main>
-      <div className={className}>
-        <h3>{t("profile")}</h3>
-        <Profile />
-      </div>
-    </main>
-  );
-}
-  
+const ProfilePage = ({className}) => (
+  <main>
+    <div className={className}>
+      <Profile />
+    </div>
+  </main>
+);
+
 const StyledProfilePage = styled(ProfilePage)`
   border: 1px solid #d8c9c9;
   margin: 2rem 1rem;

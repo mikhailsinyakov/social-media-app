@@ -51,5 +51,6 @@
   "check": "Проверить",
   "yes": "Да",
   "deletingAccount": "Удаление аккаунта",
-  "deletingAccountConfirm": "Вы уверены, что хотите удалить Ваш аккаунт?"
+  "deletingAccountConfirm": "Вы уверены, что хотите удалить Ваш аккаунт?",
+  "editProfile": "Редактировать профиль"
 }

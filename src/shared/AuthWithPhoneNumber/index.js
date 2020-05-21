@@ -75,7 +75,7 @@ const AuthWithPhoneNumber = ({type, onSuccess, phoneNumber, className}) => {
         action={checkCode}
         show={showVerifyForm}
       />
-      { showVerifyForm && <Resend onClick={sendSMS} /> }
+      <Resend onClick={sendSMS} show={showVerifyForm} />
       <div id="recaptcha"></div>
     </div>
   );
