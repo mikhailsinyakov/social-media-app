@@ -13,10 +13,7 @@ const Header = ({ className }) => {
   const firebase = useContext(FirebaseContext);
   const { user } = useContext(UserContext);
   
-  const handleClick = e => {
-    e.preventDefault();
-    firebase.auth.logOut();
-  };
+  const handleClick = e => firebase.auth.logOut();
   
   return (
     <header className={className}>

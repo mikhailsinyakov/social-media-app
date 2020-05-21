@@ -29,7 +29,7 @@ const AuthProvider = ({
 }) => {
   const firebase = useContext(FirebaseContext);
   const { updateUser } = useContext(UserContext);
-  const { Modal, setModal } = useContext(ModalContext);
+  const { setModal } = useContext(ModalContext);
   const { t } = useTranslation();
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,28 +40,24 @@ const AuthProvider = ({
   };
   
   const updatePhoneNumber = action => {
-    if (!Modal) {
-      setModal(
-        <PhoneNumberModal 
-          title={
-            action === "change" ? t("changePhoneNumber") : t("linkPhoneNumber")
-          }
-        >
-          <AuthWithPhoneNumber 
-            type={action}  
-            onSuccess={onSuccessChangePhoneNumber} 
-          />
-        </PhoneNumberModal>
-      );
-    }
+    setModal(
+      <PhoneNumberModal 
+        title={
+          action === "change" ? t("changePhoneNumber") : t("linkPhoneNumber")
+        }
+      >
+        <AuthWithPhoneNumber 
+          type={action}  
+          onSuccess={onSuccessChangePhoneNumber} 
+        />
+      </PhoneNumberModal>
+    );
   };
   
-  const linkProvider = () => {
-    if (!Modal) firebase.auth.linkProvider(id);
-  };
+  const linkProvider = () => firebase.auth.linkProvider(id);
   
   const unlinkProvider = async () => {
-    if (isSubmitting || Modal) return;
+    if (isSubmitting) return;
     if (unlinkForbidden) {
       setModal(<ErrorModal>{t("unlinkForbidden")}</ErrorModal>);
       return;

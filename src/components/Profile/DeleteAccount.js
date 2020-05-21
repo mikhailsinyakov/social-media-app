@@ -13,14 +13,13 @@ import AuthWithPhoneNumber from "shared/AuthWithPhoneNumber";
 const DeleteAccount = ({className}) => {
   const firebase = useContext(FirebaseContext);
   const { user } = useContext(UserContext);
-  const { Modal, setModal } = useContext(ModalContext);
+  const { setModal } = useContext(ModalContext);
   const { t } = useTranslation();
   
   const phoneProvider = user.providerData.filter(p => p.providerId === "phone")[0];
   const phoneNumber = phoneProvider && phoneProvider.uid;
   
   const deleteAccount = async () => {
-    if (Modal) return;
     try {
       await firebase.auth.deleteAccount();
     } catch (e) {

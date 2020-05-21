@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 
 import { FirebaseContext } from "context/Firebase";
 import { UserContext } from "context/User";
-import { ModalContext } from "context/Modal";
 
 import HelpMessage from "shared/HelpMessage";
 import Form from "shared/Form";
@@ -20,7 +19,6 @@ const Username = () => {
   const { t } = useTranslation();
   const firebase = useContext(FirebaseContext);
   const { user: {username: currUsername}, updateUser } = useContext(UserContext);
-  const { Modal } = useContext(ModalContext);
 
   return (
     <>
@@ -29,7 +27,7 @@ const Username = () => {
         type="text"
         placeholder={t("username")}
         buttonName={t("save")}
-        action={username => !Modal && firebase.auth.updateUsername(username)}
+        action={username => firebase.auth.updateUsername(username)}
         modifyValue={modifyUsername}
         autofocus={false}
         initValue={currUsername || ""}

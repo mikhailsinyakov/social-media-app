@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from "react";
+import React, { useContext, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -11,36 +11,38 @@ import Body from "./Body";
 import Actions from "./Actions";
 import Button from "./Button";
 
+const Container = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
 const Modal = ({title, buttons, children, className}) => {
   const { setModal } = useContext(ModalContext);
   const { t } = useTranslation();
   const elem = useRef(null);
-
-  useEffect(() => {
-    const handleClick = e => {
-      if (elem.current && !elem.current.contains(e.target)) setModal(null);
-    };
-    window.setTimeout(() => {
-      window.addEventListener("click", handleClick);
-    }, 500);
-    
-    return () => {
-      window.removeEventListener("click", handleClick);
-    };
-  }, [setModal]);
+  
+  const handleClick = e => {
+    if (elem.current && !elem.current.contains(e.target)) setModal(null);
+  };
 
   return (
-    <div className={className} ref={elem}>
-      <Title>{title}</Title>
-      <Body>{children}</Body>
-      <Actions>
-        {
-          buttons.map(btn => 
-            <Button onClick={btn.action} key={btn.name}>{t(btn.name)}</Button>
-          )
-        }
-      </Actions>
-    </div>
+    <Container onClick={handleClick}>
+      <div className={className} ref={elem}>
+        <Title>{title}</Title>
+        <Body>{children}</Body>
+        <Actions>
+          {
+            buttons.map(btn => 
+              <Button onClick={btn.action} key={btn.name}>{t(btn.name)}</Button>
+            )
+          }
+        </Actions>
+      </div>
+    </Container>
   );
 };
 
