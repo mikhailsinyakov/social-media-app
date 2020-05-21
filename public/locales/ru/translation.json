@@ -48,5 +48,8 @@
   "deleteAccount": "Удалить аккаунт",
   "youNeedToLinkPhoneNumber": "Для удаления аккаунта Вам нужно привязать номер телефона",
   "checkPhoneNumber": "Проверить номер телефона",
-  "check": "Проверить"
+  "check": "Проверить",
+  "yes": "Да",
+  "deletingAccount": "Удаление аккаунта",
+  "deletingAccountConfirm": "Вы уверены, что хотите удалить Ваш аккаунт?"
 }

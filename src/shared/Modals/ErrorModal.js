@@ -10,7 +10,7 @@ const ErrorModal = ({children}) => {
   
   return  (
     <Modal 
-      type="error"
+      size="small"
       title={t("errorOccurred")} 
       buttons={[{name: t("close"), action: () => setModal(null)}]}
     >

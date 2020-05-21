@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
@@ -8,6 +8,7 @@ import { ModalContext } from "context/Modal";
 
 import ErrorModal from "shared/Modals/ErrorModal";
 import PhoneNumberModal from "shared/Modals/PhoneNumberModal";
+import ConfirmationModal from "shared/Modals/ConfirmationModal";
 import AuthWithPhoneNumber from "shared/AuthWithPhoneNumber";
 
 const DeleteAccount = ({className}) => {
@@ -16,10 +17,14 @@ const DeleteAccount = ({className}) => {
   const { setModal } = useContext(ModalContext);
   const { t } = useTranslation();
   
+  const [deletingConfirmed, setDeletingConfirmed] = useState(false);
+  
   const phoneProvider = user.providerData.filter(p => p.providerId === "phone")[0];
   const phoneNumber = phoneProvider && phoneProvider.uid;
   
   const deleteAccount = async () => {
+    setDeletingConfirmed(true);
+    
     try {
       await firebase.auth.deleteAccount();
     } catch (e) {
@@ -38,10 +43,24 @@ const DeleteAccount = ({className}) => {
         }
       } else setModal(<ErrorModal>t(e.message)</ErrorModal>);
     }
-  }; 
+  };
+  
+  const confirmDeletingAccount = () => {
+    if (deletingConfirmed) deleteAccount();
+    else {
+      setModal(
+        <ConfirmationModal 
+          title={t("deletingAccount")}
+          confirmBtnAction={deleteAccount}
+        >
+          {t("deletingAccountConfirm")}
+        </ConfirmationModal>
+      )
+    }
+  };
 
   return (
-    <button className={className} onClick={deleteAccount}>
+    <button className={className} onClick={confirmDeletingAccount}>
       {t("deleteAccount")}
     </button>
   );

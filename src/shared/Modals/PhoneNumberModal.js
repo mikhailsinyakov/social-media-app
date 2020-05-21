@@ -10,7 +10,7 @@ const PhoneNumberModal = ({title, children}) => {
   
   return  (
     <Modal 
-      type="phoneNumber"
+      size="large"
       title={title}
       buttons={[{name: t("cancel"), action: () => setModal(null)}]}
     >

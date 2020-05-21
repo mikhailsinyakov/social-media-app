@@ -48,5 +48,8 @@
   "deleteAccount": "Delete account",
   "youNeedToLinkPhoneNumber": "You need to link a phone number to delete the account",
   "checkPhoneNumber": "Check phone number",
-  "check": "Check"
+  "check": "Check",
+  "yes": "Yes",
+  "deletingAccount": "Deleting account",
+  "deletingAccountConfirm": "Are you sure you want to delete your account?"
 }

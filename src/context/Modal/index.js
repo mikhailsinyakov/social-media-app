@@ -47,7 +47,7 @@ const Modal = ({title, buttons, children, className}) => {
 };
 
 Modal.propTypes = {
-  type: PropTypes.string.isRequired,
+  size: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   buttons: PropTypes.arrayOf(PropTypes.shape(
     {name: PropTypes.string, action: PropTypes.func})
@@ -57,13 +57,13 @@ Modal.propTypes = {
 
 const StyledModal = styled(Modal)`
   position: fixed;
-  top: ${({type}) => type === "error" ? "10rem": "7rem"};
+  top: ${({size}) => size === "small" ? "10rem": "7rem"};
   left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  width: ${({type}) => type === "error" ? "80%": "90%"};
-  max-width: ${({type}) => type === "error" ? "350px": "700px"};
+  width: ${({size}) => size === "small" ? "80%": "90%"};
+  max-width: ${({size}) => size === "small" ? "350px": "700px"};
   text-align: left;
   background-color: #fffdff;
   border-radius: 0.5rem;
