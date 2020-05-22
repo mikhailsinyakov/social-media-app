@@ -35,13 +35,14 @@ const DeleteAccount = ({className}) => {
               <AuthWithPhoneNumber 
                 type={"check"}  
                 phoneNumber={phoneNumber} 
+                onSuccess={() => setModal(null)}
               />
             </PhoneNumberModal>
           );
         } else {
           setModal(<ErrorModal>{t("youNeedToLinkPhoneNumber")}</ErrorModal>);
         }
-      } else setModal(<ErrorModal>t(e.message)</ErrorModal>);
+      } else setModal(<ErrorModal>{t(e.message)}</ErrorModal>);
     }
   };
   
