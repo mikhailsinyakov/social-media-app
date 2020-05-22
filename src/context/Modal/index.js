@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -28,6 +28,18 @@ const Modal = ({title, buttons, children, className}) => {
   const handleClick = e => {
     if (elem.current && !elem.current.contains(e.target)) setModal(null);
   };
+  
+  useEffect(() => {
+    const html = window.document.documentElement;
+    const scrollbarWidth = window.innerWidth - html.clientWidth;
+    html.style.overflow = "hidden";
+    html.style.paddingRight = scrollbarWidth + "px";
+    
+    return () => {
+      html.style.overflow = "auto";
+      html.style.paddingRight = "0";
+    };
+  }, []);
 
   return (
     <Container onClick={handleClick}>
