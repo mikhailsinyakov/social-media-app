@@ -119,6 +119,7 @@ const Form = ({
       <Button 
         onClick={submit} 
         className={isButtonActive ? "active": ""}
+        show={show}
         showMsg={showMsg}
         message={errorMsg ? errorMsg : defaultMsg}
       >

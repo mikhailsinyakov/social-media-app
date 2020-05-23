@@ -48,8 +48,14 @@ const Modal = ({title, buttons, children, className}) => {
         <Body>{children}</Body>
         <Actions>
           {
-            buttons.map(btn => 
-              <Button onClick={btn.action} key={btn.name}>{t(btn.name)}</Button>
+            buttons.map((btn, i) => 
+              <Button 
+                onClick={btn.action} 
+                className={i === 0 ? "confirm" : ""}
+                key={btn.name}
+              >
+                {t(btn.name)}
+              </Button>
             )
           }
         </Actions>
@@ -75,7 +81,7 @@ const StyledModal = styled(Modal)`
   margin-left: auto;
   margin-right: auto;
   width: ${({size}) => size === "small" ? "80%": "90%"};
-  max-width: ${({size}) => size === "small" ? "350px": "700px"};
+  max-width: ${({size}) => size === "small" ? "350px": "400px"};
   text-align: left;
   background-color: #fffdff;
   border-radius: 0.5rem;

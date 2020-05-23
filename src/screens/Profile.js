@@ -14,7 +14,7 @@ const ProfilePage = ({className}) => (
 
 const StyledProfilePage = styled(ProfilePage)`
   border: 1px solid #d8c9c9;
-  margin: 2rem 1rem;
+  margin: 2rem 0;
   padding: 1rem;
   background-color: aqua;
   border-radius: 0.2rem;

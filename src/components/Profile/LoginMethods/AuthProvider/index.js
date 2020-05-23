@@ -10,7 +10,7 @@ import ErrorModal from "shared/Modals/ErrorModal";
 import PhoneNumberModal from "shared/Modals/PhoneNumberModal";
 import AuthWithPhoneNumber from "shared/AuthWithPhoneNumber";
 
-import Name from "./Name";
+import Icon from "./Icon";
 import UserId from "./UserId";
 import Button from "./Button";
 import Loader from "shared/Loader";
@@ -78,7 +78,7 @@ const AuthProvider = ({
   if (!userId) {
     return (
       <div className={className}>
-        <Name>{name}</Name>
+        <Icon name={name} />
         <UserId>{t("notLinked")}</UserId>
         <Button 
           onClick={
@@ -93,10 +93,10 @@ const AuthProvider = ({
   
   return (
     <div className={className}>
-      <Name>{name}</Name>
+      <Icon name={name} />
       <UserId className="linked">{userId}</UserId>
       <Button 
-        className="linked" 
+        className={id === "phone" && unlinkForbidden ? "change" : "linked"}
         onClick={
           id === "phone" && unlinkForbidden ? 
             () => updatePhoneNumber("change") : 
@@ -123,9 +123,18 @@ const StyledAuthProvider = styled(AuthProvider)`
   display: flex;
   padding: 0.5rem;
   align-items: center;
-  border-bottom: 1px solid #bbaaaa;
-  max-width: 450px;
-  margin: 0 auto;
+  border: 1px solid transparent;
+  max-width: 400px;
+  margin: 0.5rem auto;
+  border-radius: 1rem;
+  cursor: default;
+  
+  &:hover {
+    background-image: linear-gradient(to right, 
+                                      rgba(0,0,0,0.1) 3rem, 
+                                      rgba(0,0,0,0.05) 3rem);
+    border-color: #bbaaaa;
+  }
   
   @media screen and (min-width: 400px) {
     font-size: 1rem;

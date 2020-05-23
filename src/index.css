@@ -6,6 +6,16 @@
   transition: opacity 0.5s;
 }
 
+:root {
+  --btn-color-disabled: #ebebe4;
+  --btn-primary-color-active: #5699d2;
+  --btn-primary-color-hover: #4889c1;
+  --btn-warning-color-active: #f0ad4e;
+  --btn-warning-color-hover: #ec971f;
+  --btn-neutral-color-active: #5bc0de;
+  --btn-neutral-color-hover: #31b0d5;
+}
+
 body {
   margin: 0 auto;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

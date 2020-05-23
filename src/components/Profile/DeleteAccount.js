@@ -78,11 +78,12 @@ const StyledDeleteAccount = styled(DeleteAccount)`
   min-width: 4.5rem;
   position: relative;
   cursor: pointer;
-  background-color: #f59948;
+  background-color: var(--btn-warning-color-active);
   margin-top: 1rem;
+  transform: translate(-1.2rem, 0);
   
   &:hover {
-    background-color: #f38e35;
+    background-color: var(--btn-warning-color-hover);
   }
   
   &:focus {

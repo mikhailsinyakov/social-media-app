@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Button = styled.button`
   padding: 0.5rem;
   border: none;
-  background-color: #829af1;
+  background-color: var(--btn-warning-color-active);
   cursor: pointer;
   font-family: 'Baloo 2',cursive;
   border-radius: 0.3rem;
@@ -16,7 +16,15 @@ const Button = styled.button`
   }
   
   &:hover {
-    background-color: #5d7df1;
+    background-color: var(--btn-warning-color-hover);
+  }
+  
+  &.confirm {
+    background-color: var(--btn-primary-color-active);
+  }
+  
+  &.confirm:hover {
+    background-color: var(--btn-primary-color-hover);
   }
   
   @media screen and (min-width: 400px) {

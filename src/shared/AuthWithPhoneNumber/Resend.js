@@ -11,7 +11,6 @@ const Button = styled.button`
   
   &:hover {
     text-decoration: underline;
-    cursor: pointer;
   }
   
   &:focus {
@@ -19,13 +18,18 @@ const Button = styled.button`
   }
 `;
 
-const Resend = ({onClick, className}) => {
+const Resend = ({show, onClick, className}) => {
   const { t } = useTranslation();
   
   return (
     <p className={className}>
       {t("didntGetCode")}
-      <Button onClick={onClick}>{t("sendAgain")}</Button>
+      <Button 
+        onClick={onClick} 
+        style={{cursor: show ? "pointer" : "default"}}
+      >
+        {t("sendAgain")}
+      </Button>
     </p>
   );
 }

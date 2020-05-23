@@ -17,9 +17,9 @@ const LoginMethods = () => {
   };
 
   const authProviders = [
-    {id: "phone", name: t("phoneNumber")},
-    {id: "google.com", name: "Google"},
-    {id: "github.com", name: "Github"}
+    {id: "phone", name: "phone"},
+    {id: "google.com", name: "google"},
+    {id: "github.com", name: "github"}
   ];
   
   return (
