@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { compose } from "recompose";
+import { Navigation } from "react-tiger-transition";
+import "react-tiger-transition/styles/main.min.css";
 
 import { FirebaseContext, withFirebaseContext } from "context/Firebase";
 import { UserContext, withUserContext } from "context/User";
@@ -10,6 +12,8 @@ import { ModalContext, withModalContext } from "context/Modal";
 
 import CustomRoute from "./CustomRoute";
 import Loader from "shared/Loader";
+
+import Screen from "screens/Screen";
 import LoginPage from "screens/Login";
 import FeedPage from "screens/Feed";
 import ProfilePage from "screens/Profile";
@@ -19,6 +23,12 @@ import ErrorModal from "shared/Modals/ErrorModal";
 const StyledLoader = styled(Loader)`
   margin: 5rem auto;
 `;
+
+const routes = [
+  { path: "/", Component: FeedPage },
+  { path: "/login", Component: LoginPage },
+  { path: "/profile", Component: ProfilePage }
+];
 
 const App = () => {
   const { t, ready, i18n: { language } } = useTranslation();
@@ -61,18 +71,24 @@ const App = () => {
   
   return (
     <>
-      <CustomRoute user={user} exact path="/login">
-        <LoginPage />
-      </CustomRoute>
-      <CustomRoute user={user} exact path="/">
-        <FeedPage />
-      </CustomRoute>
-      <CustomRoute user={user} exact path="/profile">
-        <ProfilePage />
-      </CustomRoute>
+      <Navigation>
+        {
+          routes.map(({path, Component}) => (
+            <CustomRoute key={path} user={user} exact path={path}>
+              <Screen addHeaderFooter={path !== "/login"}>
+                <Component />
+              </Screen>
+            </CustomRoute>
+          )
+        )}
+      </Navigation>
       {Modal}
     </>
   );
 };
 
-export default compose(withModalContext, withFirebaseContext, withUserContext)(App);
+export default compose(
+  withModalContext, 
+  withFirebaseContext, 
+  withUserContext
+)(App);

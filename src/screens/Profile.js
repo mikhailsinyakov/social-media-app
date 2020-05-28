@@ -1,15 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-import withHeaderAndFooter from "./withHeaderAndFooter";
 import Profile from "components/Profile";
 
 const ProfilePage = ({className}) => (
-  <main>
+  <>
     <div className={className}>
       <Profile />
     </div>
-  </main>
+  </>
 );
 
 const StyledProfilePage = styled(ProfilePage)`
@@ -20,4 +19,4 @@ const StyledProfilePage = styled(ProfilePage)`
   border-radius: 0.2rem;
 `;
 
-export default withHeaderAndFooter(StyledProfilePage);
+export default StyledProfilePage;

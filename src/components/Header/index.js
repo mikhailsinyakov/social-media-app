@@ -1,12 +1,24 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { fold } from "react-tiger-transition";
 
 import { FirebaseContext } from "context/Firebase";
 import { UserContext } from "context/User";
 
 import Button from "./Button";
 import Link from "./Link";
+
+fold({
+  name: "fold-left",
+  direction: "left"
+});
+
+fold({
+  name: "fold-right",
+  direction: "right"
+});
+
 
 const Header = ({ className }) => {
   const { t } = useTranslation();
@@ -18,10 +30,10 @@ const Header = ({ className }) => {
   return (
     <header className={className}>
       {
-        user.username && (
+        user && user.username && (
           <>
-            <Link to="/">{t("feed")}</Link>
-            <Link to="/profile">{t("profile")}</Link>
+            <Link to="/" transition="fold-right">{t("feed")}</Link>
+            <Link to="/profile" transition="fold-left">{t("profile")}</Link>
           </>
         )
       }

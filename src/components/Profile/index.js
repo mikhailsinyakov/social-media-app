@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
+import { UserContext } from "context/User";
 import Username from "./Username";
 import Info from "./Info";
 import LoginMethods from "./LoginMethods";
@@ -9,6 +10,9 @@ import DeleteAccount from "./DeleteAccount";
 
 const Profile = ({className}) => {
   const { t } = useTranslation();
+  const { user } = useContext(UserContext);
+  
+  if (!user) return null;
   
   return (
     <div className={className}>

@@ -7,12 +7,12 @@ import Login from "components/Login";
 const LoginPage = ({className}) => {
   const { t } = useTranslation();
   return (
-    <main>
+    <>
       <div className={className}>
         <h3>{t("appName")}</h3>
         <Login />
       </div>
-    </main>
+    </>
   );
 };
   
