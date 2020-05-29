@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { FirebaseContext } from "context/Firebase";
 import HelpMessage from "shared/HelpMessage";
+import Scale from "shared/Transitions/Scale";
 import Form from "shared/Form";
 import Resend from "./Resend";
 
@@ -68,14 +69,16 @@ const AuthWithPhoneNumber = ({type, onSuccess, phoneNumber, className}) => {
         initValue={phoneNumber || ""}
         disabled={!!phoneNumber}
       />
-      <Form
-        type="number"
-        placeholder={t("smsCode")}
-        buttonName={t(type)}
-        action={checkCode}
-        show={showVerifyForm}
-      />
-      <Resend onClick={sendSMS} show={showVerifyForm} />
+      <Scale in={showVerifyForm}>
+        <Form
+          type="number"
+          placeholder={t("smsCode")}
+          buttonName={t(type)}
+          action={checkCode}
+          show={showVerifyForm}
+        />
+        <Resend onClick={sendSMS} />
+      </Scale>
       <div id="recaptcha"></div>
     </div>
   );

@@ -119,7 +119,6 @@ const Form = ({
       <Button 
         onClick={submit} 
         className={isButtonActive ? "active": ""}
-        show={show}
         showMsg={showMsg}
         message={errorMsg ? errorMsg : defaultMsg}
       >
@@ -151,7 +150,6 @@ const StyledForm = styled(Form)`
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  opacity: ${({show}) => typeof show === "boolean" ? show ? "1" : "0" : "1"};
 `;
 
 export default StyledForm;

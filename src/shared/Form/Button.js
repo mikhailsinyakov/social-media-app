@@ -9,7 +9,7 @@ const Button = styled.button`
   font-size: 0.8rem;
   min-width: 4.5rem;
   position: relative;
-  cursor: ${({show}) => show ? "not-allowed" : "default"};
+  cursor: "not-allowed";
   
   &.active {
     cursor: pointer;

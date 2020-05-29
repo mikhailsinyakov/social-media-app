@@ -1,6 +1,21 @@
+import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
+import Fade from "shared/Transitions/Fade";
 
-const Loader = styled.div`
+const Loader = ({show, className}) => (
+  <Fade in={show}>
+    <div className={className}></div>
+  </Fade>
+);
+
+Loader.propTypes = {
+  show: PropTypes.bool.isRequired,
+  size: PropTypes.number.isRequired,
+  expand: PropTypes.bool
+};
+
+const StyledLoader = styled(Loader)`
   flex-shrink: 0;
   margin: 0 0.5rem;
   border: ${({size}) => size / 7.5 * 0.8}px solid #f3f3f3;
@@ -9,7 +24,6 @@ const Loader = styled.div`
   width: ${({size}) => size * 0.8}px;
   height: ${({size}) => size * 0.8}px;
   animation: spin 2s linear infinite;
-  opacity: ${({show}) => show ? "1" : "0"};
 
   @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -28,4 +42,4 @@ const Loader = styled.div`
   }
 `;
 
-export default Loader;
+export default StyledLoader;

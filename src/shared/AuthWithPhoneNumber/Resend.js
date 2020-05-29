@@ -18,16 +18,13 @@ const Button = styled.button`
   }
 `;
 
-const Resend = ({show, onClick, className}) => {
+const Resend = ({onClick, className}) => {
   const { t } = useTranslation();
   
   return (
     <p className={className}>
       {t("didntGetCode")}
-      <Button 
-        onClick={onClick} 
-        style={{cursor: show ? "pointer" : "default"}}
-      >
+      <Button onClick={onClick}>
         {t("sendAgain")}
       </Button>
     </p>
@@ -35,13 +32,11 @@ const Resend = ({show, onClick, className}) => {
 }
 
 Resend.propTypes = {
-  show: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired
 };
 
 const StyledResend = styled(Resend)`
   font-size: 0.8rem;
-  opacity: ${({show}) => show ? "1" : "0"};
 `;
 
 export default StyledResend;
