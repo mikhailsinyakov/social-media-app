@@ -6,6 +6,7 @@ import { fold } from "react-tiger-transition";
 import { FirebaseContext } from "context/Firebase";
 import { UserContext } from "context/User";
 
+import Logo from "./Logo";
 import Button from "./Button";
 import Link from "./Link";
 
@@ -29,6 +30,7 @@ const Header = ({ className }) => {
   
   return (
     <header className={className}>
+      <Logo src="favicon-32x32.png" alt="app-logo" />
       {
         user && user.username && (
           <>
