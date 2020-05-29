@@ -6,13 +6,13 @@ import Modal, { ModalContext } from "context/Modal";
 
 const PhoneNumberModal = ({title, children}) => {
   const { t } = useTranslation();
-  const { setModal } = useContext(ModalContext);
+  const { hideModal } = useContext(ModalContext);
   
   return  (
     <Modal 
       size="large"
       title={title}
-      buttons={[{name: t("cancel"), action: () => setModal(null)}]}
+      buttons={[{name: t("cancel"), action: hideModal}]}
     >
       {children}
     </Modal>

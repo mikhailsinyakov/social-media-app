@@ -7,7 +7,8 @@ const duration = 300;
 const Transitions = ({in: inProp, cssProp, exitValue, enterValue, children}) => {
   const defaultStyle = {
     transition: `${cssProp} ${duration}ms ease-in-out`,
-    [cssProp]: exitValue
+    [cssProp]: exitValue,
+    height: "100%"
   };
 
   const transitionStyles = {

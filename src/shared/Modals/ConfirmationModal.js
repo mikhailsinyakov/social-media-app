@@ -6,11 +6,11 @@ import Modal, { ModalContext } from "context/Modal";
 
 const ConfirmationModal = ({title, confirmBtnAction, children}) => {
   const { t } = useTranslation();
-  const { setModal } = useContext(ModalContext);
+  const { hideModal } = useContext(ModalContext);
   
   const confirm = () => {
     confirmBtnAction();
-    setModal(null);
+    hideModal();
   };
   
   return  (
@@ -19,7 +19,7 @@ const ConfirmationModal = ({title, confirmBtnAction, children}) => {
       title={title} 
       buttons={[
         {name: t("yes"), action: confirm},
-        {name: t("cancel"), action: () => setModal(null)}
+        {name: t("cancel"), action: hideModal}
       ]}
     >
       {children}

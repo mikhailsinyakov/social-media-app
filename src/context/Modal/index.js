@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import ModalContext from "./context";
 import withModalContext from "./withContext";
 
+import Scale from "shared/Transitions/Scale";
 import Title from "./Title";
 import Body from "./Body";
 import Actions from "./Actions";
@@ -21,12 +22,12 @@ const Container = styled.div`
 `;
 
 const Modal = ({title, buttons, children, className}) => {
-  const { setModal } = useContext(ModalContext);
+  const { hideModal, show } = useContext(ModalContext);
   const { t } = useTranslation();
-  const elem = useRef(null);
+  const modalRef = useRef(null);
   
   const handleClick = e => {
-    if (elem.current && !elem.current.contains(e.target)) setModal(null);
+    if (modalRef.current && !modalRef.current.contains(e.target)) hideModal();
   };
   
   useEffect(() => {
@@ -43,23 +44,25 @@ const Modal = ({title, buttons, children, className}) => {
 
   return (
     <Container onClick={handleClick}>
-      <div className={className} ref={elem}>
-        <Title>{title}</Title>
-        <Body>{children}</Body>
-        <Actions>
-          {
-            buttons.map((btn, i) => 
-              <Button 
-                onClick={btn.action} 
-                className={i === 0 ? "confirm" : ""}
-                key={btn.name}
-              >
-                {t(btn.name)}
-              </Button>
-            )
-          }
-        </Actions>
-      </div>
+      <Scale in={show}>
+        <div className={className} ref={modalRef}>
+          <Title>{title}</Title>
+          <Body>{children}</Body>
+          <Actions>
+            {
+              buttons.map((btn, i) => 
+                <Button 
+                  onClick={btn.action} 
+                  className={i === 0 ? "confirm" : ""}
+                  key={btn.name}
+                >
+                  {t(btn.name)}
+                </Button>
+              )
+            }
+          </Actions>
+        </div>
+      </Scale>
     </Container>
   );
 };
@@ -74,7 +77,7 @@ Modal.propTypes = {
 };
 
 const StyledModal = styled(Modal)`
-  position: fixed;
+  position: absolute;
   top: ${({size}) => size === "small" ? "10rem": "7rem"};
   left: 0;
   right: 0;

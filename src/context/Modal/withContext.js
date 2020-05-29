@@ -1,40 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import ModalContext from "./context";
 
 const withContext = Component => props => {
   const [Modal, setModal] = useState(null);
+  const [show, setShow] = useState(false);
   
-  /*const setModalError = message => 
-    setModal({
-      type: "error", 
-      title: "errorOccurred", 
-      body: message, 
-      buttons: [{name: "close", action: () => setModal(null)}]
-    });
-    
-  const setCheckPhoneNumber = ({action, phoneNumber = null, onSuccess = null}) => {
-    let title;
-    if (action === "link") title = "linkPhoneNumber";
-    else if (action === "change") title = "changePhoneNumber";
-    else if (action === "check") title = "checkPhoneNumber";
-    const body = (
-      <AuthWithPhoneNumber 
-        type={action} 
-        onSuccess={onSuccess} 
-        phoneNumber={phoneNumber}
-      />
-    );
-    setModal({ 
-      type: "action", 
-      title, 
-      body, 
-      buttons: [{name: "cancel", action: () => setModal(null)}]
-    });
-  };*/
+  const hideModal = () => {
+    setShow(false);
+    setTimeout(() => setModal(null), 400);
+  };
+  
+  useEffect(() => {
+    if (Modal) setShow(true);
+  }, [Modal, setShow]);
   
   return (
-    <ModalContext.Provider value={{Modal, setModal}}>
+    <ModalContext.Provider value={{Modal, setModal, hideModal, show}}>
       <Component {...props} />
     </ModalContext.Provider>
   );

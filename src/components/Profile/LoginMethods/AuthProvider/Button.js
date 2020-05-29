@@ -8,7 +8,7 @@ const Button = styled.button`
   font-family: 'Baloo 2',cursive;
   border-radius: 0.3rem;
   font-size: 0.8rem;
-  width: 4.5rem;
+  width: 5rem;
   position: relative;
   
   &:hover {
@@ -37,7 +37,6 @@ const Button = styled.button`
   
   @media screen and (min-width: 400px) {
     font-size: 0.9rem;
-    width: 5rem;
   }
 `;
 
