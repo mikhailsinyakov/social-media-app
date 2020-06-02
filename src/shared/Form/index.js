@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
 import Input from "./Input";
 import Button from "./Button";
+import Message from "./Message";
 import Loader from "shared/Loader";
 
 const Form = ({
@@ -24,7 +25,8 @@ const Form = ({
   disabled = false
 }) => {
   const { t } = useTranslation();
-  const inputEl = useRef(null);
+  const formRef = useRef(null);
+  const inputRef = useRef(null);
   const selStart = useRef(null);
   const isMount = useRef(false);
   
@@ -33,10 +35,11 @@ const Form = ({
   const [errorMsg, setErrorMsg] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedValue, setSubmittedValue] = useState(defaultSubmittedValue);
+  const [msgPos, setMsgPos] = useState({width: 0, left: 0, top: 0});
   
   const isValueNew = submittedValue !== value;
   const isButtonActive = value && isValueValid && isValueNew && !errorMsg;
-  const showMsg = value && (!isValueValid || !!errorMsg);
+  const showMsg = Boolean(value && (!isValueValid || !!errorMsg));
   if (buttonNameSubmitted) {
     buttonName = submittedValue === value ? buttonNameSubmitted : buttonName;
   }
@@ -75,7 +78,7 @@ const Form = ({
         await action(value);
         if (isMount.current) {
           setSubmittedValue(value);
-          inputEl.current.blur();
+          inputRef.current.blur();
         }
         if (onSubmitSucceed) onSubmitSucceed();
       } catch (e) {
@@ -85,6 +88,18 @@ const Form = ({
       }
     }
   };
+  
+  const updateMsgPos = useCallback(() => {
+    if (showMsg) {
+      const formPos = formRef.current.getBoundingClientRect();
+      const inputPos = inputRef.current.getBoundingClientRect();
+      setMsgPos({ 
+        width: inputPos.width, 
+        left: inputPos.left - formPos.left, 
+        top: inputPos.bottom - formPos.top 
+      });
+    }
+  }, [showMsg, setMsgPos]);
   
   useEffect(() => {
     isMount.current = true;
@@ -96,17 +111,27 @@ const Form = ({
   useEffect(() => {
     if (selStart.current !== null) {
       const index = selStart.current;
-      inputEl.current.setSelectionRange(index, index);
+      inputRef.current.setSelectionRange(index, index);
     }
   }, [value]);
   
   useEffect(() => {
-    if (show && autofocus) inputEl.current.focus();
+    if (show && autofocus) inputRef.current.focus();
     else if (!show) setValue("");
   }, [show, autofocus]);
   
+  useEffect(() => {
+    updateMsgPos();
+    window.addEventListener("resize", updateMsgPos);
+    return () => window.removeEventListener("resize", updateMsgPos);
+  }, [updateMsgPos]);
+  
   return (
-    <form className={className} onSubmit={e => {e.preventDefault();}}>
+    <form 
+      ref={formRef}
+      className={className} 
+      onSubmit={e => {e.preventDefault();}}
+    >
       <Input
         type={type} 
         value={value} 
@@ -114,16 +139,20 @@ const Form = ({
         onKeyDown={e => e.key === "Enter" && submit()} 
         placeholder={placeholder}
         disabled={disabled}
-        ref={inputEl}
+        ref={inputRef}
       />
       <Button 
-        onClick={submit} 
-        className={isButtonActive ? "active": ""}
-        showMsg={showMsg}
-        message={errorMsg ? errorMsg : defaultMsg}
+        disabled={!value || !isButtonActive}
+        onClick={submit}
       >
         {buttonName}
       </Button>
+      <Message 
+        showMsg={showMsg} 
+        msgPos={msgPos}
+      >
+        {errorMsg ? errorMsg : defaultMsg}
+      </Message>
       <Loader size={30} show={isSubmitting} />
     </form>
   );
@@ -142,10 +171,11 @@ Form.propTypes = {
   buttonNameSubmitted: PropTypes.string,
   defaultSubmittedValue: PropTypes.string,
   onSubmitSucceed: PropTypes.func,
-  unChangedValue: PropTypes.string
+  disabled: PropTypes.bool
 };
 
 const StyledForm = styled(Form)`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;

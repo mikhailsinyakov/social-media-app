@@ -5,7 +5,7 @@ import Fade from "shared/Transitions/Fade";
 
 const Loader = ({show, className}) => (
   <Fade in={show}>
-    <div className={className}></div>
+    <div className={className} data-testid="loader"></div>
   </Fade>
 );
 
