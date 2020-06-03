@@ -28,17 +28,13 @@ const Header = ({ className }) => {
   
   const handleClick = e => firebase.auth.logOut();
   
+  if (!user || !user.username) return null;
+  
   return (
     <header className={className}>
       <Logo src="favicon-32x32.png" alt="app-logo" />
-      {
-        user && user.username && (
-          <>
-            <Link to="/" transition="fold-right">{t("feed")}</Link>
-            <Link to="/profile" transition="fold-left">{t("profile")}</Link>
-          </>
-        )
-      }
+      <Link to="/" transition="fold-right">{t("feed")}</Link>
+      <Link to="/profile" transition="fold-left">{t("profile")}</Link>
       <Button onClick={handleClick}>{t("logOut")}</Button>
     </header>
   );
