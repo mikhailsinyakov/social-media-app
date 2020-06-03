@@ -22,10 +22,10 @@ const Transitions = ({in: inProp, cssProp, exitValue, enterValue, children}) => 
     <Transition in={inProp} timeout={duration}>
       {
         state => (
-          <div style={{
-            ...defaultStyle,
-            ...transitionStyles[state]
-          }}>
+          <div 
+            style={{ ...defaultStyle, ...transitionStyles[state] }}
+            data-testid={cssProp}
+          >
             {children}
           </div>
         )

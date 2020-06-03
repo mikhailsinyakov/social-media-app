@@ -49,7 +49,7 @@ const AuthWithPhoneNumber = ({type, onSuccess, phoneNumber, className}) => {
       await firebase.auth.reauthenticate(code);
       await firebase.auth.deleteAccount();
     }
-    if (onSuccess) onSuccess(phoneNum);
+    if (onSuccess) onSuccess(phoneNum || phoneNumber);
   };
   
   useEffect(() => {
