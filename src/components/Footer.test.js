@@ -1,8 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { render, fireEvent, act, cleanup, wait } from "@testing-library/react";
+import { render, cleanup } from "@testing-library/react";
 
 import Footer from "./Footer";
+
+afterEach(cleanup);
 
 it("renders without crashing", () => {
   render(<Footer />);

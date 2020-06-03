@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { render, fireEvent, act, cleanup, wait } from "@testing-library/react";
+import { render, fireEvent, cleanup } from "@testing-library/react";
 
 import { FirebaseContext } from "context/Firebase";
 import { UserContext } from "context/User";
@@ -15,6 +15,8 @@ const firebase = {
 const user = {
   username: "@username"
 };
+
+afterEach(cleanup);
 
 it("renders without crashing", () => {
   render(

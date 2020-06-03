@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { render, fireEvent, act, cleanup, wait } from "@testing-library/react";
+import { render, fireEvent, act, cleanup } from "@testing-library/react";
 
 import { ModalContext } from "context/Modal";
 import ErrorModal from "./ErrorModal";
