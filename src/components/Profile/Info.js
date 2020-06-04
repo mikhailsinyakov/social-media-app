@@ -30,7 +30,7 @@ const Info = ({className}) => {
   
   return (
     <div className={className}>
-      <Photo src={photoURL} alt="" />
+      <Photo src={photoURL} alt="" data-testid="photo" />
       <UsernameContainer>
         <Username><b>{username}</b></Username>
       </UsernameContainer>

@@ -84,6 +84,7 @@ const AuthProvider = ({
           onClick={
             id === "phone" ? () => updatePhoneNumber("link") : linkProvider
           }
+          data-testid={`${id}-button`}
         >
           {t("link")}
         </Button>
@@ -102,6 +103,7 @@ const AuthProvider = ({
             () => updatePhoneNumber("change") : 
             unlinkProvider
         }
+        data-testid={`${id}-button`}
       >
         {id === "phone" && unlinkForbidden ? t("change") : t("unlink")}
       </Button>
