@@ -10,6 +10,7 @@ class Auth {
       "google.com": this.googleProvider,
       "github.com": this.githubProvider
     };
+    if (window.Cypress) window.firebase = { auth: this };
   }
   
   onUserChanged(fn) {
@@ -25,6 +26,9 @@ class Auth {
   }
   
   createRecaptchaVerifier() {
+    if (process.env.NODE_ENV === "development") {
+      this.auth.settings.appVerificationDisabledForTesting = true;
+    }
     this.recaptchaVerifier = new this.app.auth.RecaptchaVerifier(
       "recaptcha", 
       { size: "invisible" }
@@ -148,7 +152,18 @@ class Auth {
     this.auth.signInWithRedirect(this.githubProvider);
   }
   
+  loginWithGoogleWithToken(token) {
+    const credential = this.app.auth.GoogleAuthProvider.credential(null, token);
+    this.auth.signInWithCredential(credential);
+  }
+  
+  loginWithGithubWithToken(token) {
+    const credential = this.app.auth.GithubAuthProvider.credential(token);
+    this.auth.signInWithCredential(credential);
+  }
+  
   async deleteAccount() {
+    if (!this.getCurrentUser()) return;
     try {
       await this.getCurrentUser().delete();
     } catch (e) {

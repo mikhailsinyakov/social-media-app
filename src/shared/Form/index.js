@@ -131,6 +131,7 @@ const Form = ({
       ref={formRef}
       className={className} 
       onSubmit={e => {e.preventDefault();}}
+      data-testid={placeholder}
     >
       <Input
         type={type} 

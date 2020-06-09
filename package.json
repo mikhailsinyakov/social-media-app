@@ -7,6 +7,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "awesome-phonenumber": "^2.31.0",
+    "cypress": "^4.7.0",
     "firebase": "^7.14.2",
     "i18next": "^19.4.4",
     "i18next-browser-languagedetector": "^4.1.1",
@@ -27,7 +28,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
+    "cypress": "node_modules/.bin/cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
