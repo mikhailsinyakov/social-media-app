@@ -26,10 +26,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage",
     "eject": "react-scripts eject",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
-    "cypress": "node_modules/.bin/cypress open"
+    "cypress": "node_modules/.bin/cypress open",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
+    "cy:run": "cypress run --record",
+    "test:ci": "start-server-and-test http://localhost:3000 cy:run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -47,7 +50,9 @@
     ]
   },
   "devDependencies": {
+    "coveralls": "^3.1.0",
     "cypress-firebase": "^1.2.0",
-    "firebase-admin": "^8.12.1"
+    "firebase-admin": "^8.12.1",
+    "start-server-and-test": "^1.11.0"
   }
 }

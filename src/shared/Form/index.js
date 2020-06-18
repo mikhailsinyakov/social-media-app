@@ -58,7 +58,7 @@ const Form = ({
     selStart.current = i;
   };
   
-  const updateValue = e => {
+  const updateValue = useCallback(e => {
     const { selectionStart: selIndex, value } = e.target;
     let newValue = value, isValid = isValueValid;
     if (modifyValue) {
@@ -69,7 +69,7 @@ const Form = ({
     setValue(newValue);
     setIsValueValid(isValid);
     setErrorMsg(null);
-  };
+  }, [modifyValue, isValueValid]);
   
   const submit = async () => {
     const minTimeToShowLoader = 500;
@@ -113,8 +113,8 @@ const Form = ({
   }, [showMsg, setMsgPos]);
   
   useEffect(() => {
-    initValue && updateValue({target: { value: initValue, selectionStart: 16 }});
-  }, [initValue]);
+    initValue && !value && updateValue({target: { value: initValue, selectionStart: 16 }});
+  }, [initValue, value, updateValue]);
   
   useEffect(() => {
     isMount.current = true;
