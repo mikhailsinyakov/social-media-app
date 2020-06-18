@@ -36,6 +36,7 @@ class Auth {
   }
   
   async sendSMSCode(phoneNumber) {
+    if (!this.recaptchaVerifier) this.createRecaptchaVerifier();
     try {
       this.confirmationResult = await this.auth.signInWithPhoneNumber(
         phoneNumber, 
@@ -79,7 +80,7 @@ class Auth {
     try {
       await this.getCurrentUser().linkWithCredential(credential);
     } catch (e) {
-      this.handleConfirmCodeError(e, "couldntLoginWithThisNumber");
+      this.handleConfirmCodeError(e, "couldntLinkThisNumber");
     }
   }
   
@@ -118,6 +119,16 @@ class Auth {
     this.getCurrentUser().linkWithRedirect(provider);
   }
   
+  async linkGoogleWithToken(token) {
+    const credential = this.app.auth.GoogleAuthProvider.credential(null, token);
+    await this.getCurrentUser().linkWithCredential(credential);
+  }
+  
+  async linkGithubWithToken(token) {
+    const credential = this.app.auth.GithubAuthProvider.credential(token);
+    await this.getCurrentUser().linkWithCredential(credential);
+  }
+  
   getRedirectResult() {
     return new Promise(resolve => {
       this.auth.getRedirectResult()
@@ -152,18 +163,17 @@ class Auth {
     this.auth.signInWithRedirect(this.githubProvider);
   }
   
-  loginWithGoogleWithToken(token) {
+  async loginWithGoogleWithToken(token) {
     const credential = this.app.auth.GoogleAuthProvider.credential(null, token);
-    this.auth.signInWithCredential(credential);
+    await this.auth.signInWithCredential(credential);
   }
   
-  loginWithGithubWithToken(token) {
+  async loginWithGithubWithToken(token) {
     const credential = this.app.auth.GithubAuthProvider.credential(token);
-    this.auth.signInWithCredential(credential);
+    await this.auth.signInWithCredential(credential);
   }
   
   async deleteAccount() {
-    if (!this.getCurrentUser()) return;
     try {
       await this.getCurrentUser().delete();
     } catch (e) {

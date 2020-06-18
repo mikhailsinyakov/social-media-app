@@ -30,7 +30,7 @@ const Form = ({
   const selStart = useRef(null);
   const isMount = useRef(false);
   
-  const [value, setValue] = useState(initValue);
+  const [value, setValue] = useState("");
   const [isValueValid, setIsValueValid] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,8 +72,11 @@ const Form = ({
   };
   
   const submit = async () => {
+    const minTimeToShowLoader = 500;
     if (value && isButtonActive) {
       setIsSubmitting(true);
+      const startToShow = Date.now();
+      
       try {
         await action(value);
         if (isMount.current) {
@@ -84,7 +87,15 @@ const Form = ({
       } catch (e) {
         setErrorMsg(t(e.message));
       } finally {
-        isMount.current && setIsSubmitting(false);
+        if (isMount.current) {
+          const time = Date.now();
+          if (time - startToShow > minTimeToShowLoader) setIsSubmitting(false);
+          else {
+            setTimeout(() => {
+              setIsSubmitting(false);
+            }, minTimeToShowLoader - (time - startToShow));
+          }
+        }
       }
     }
   };
@@ -100,6 +111,10 @@ const Form = ({
       });
     }
   }, [showMsg, setMsgPos]);
+  
+  useEffect(() => {
+    initValue && updateValue({target: { value: initValue, selectionStart: 16 }});
+  }, [initValue]);
   
   useEffect(() => {
     isMount.current = true;

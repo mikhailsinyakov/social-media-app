@@ -46,8 +46,8 @@ const App = () => {
     }
    }, [t, language, ready, firebase]);
    
-   useEffect(() => {
-    if (location.pathname === "/login" || location.pathname === "/profile") {
+  useEffect(() => {
+    if (ready && (location.pathname === "/login" || location.pathname === "/profile")) {
       (async () => {
         const result = await firebase.auth.getRedirectResult();
         if (result.outcome === "failure") {
@@ -55,6 +55,8 @@ const App = () => {
           const notCompletedAction = location.pathname === "/login" ? 
                                       t("couldntLoginWith") : 
                                       t("couldntLink");
+          console.log(`${notCompletedAction} ${providerId}. ${t(cause)}`)
+          console.log(t("couldntLoginWith"))
           setModal(
             <ErrorModal>
               {`${notCompletedAction} ${providerId}. ${t(cause)}`}
@@ -63,7 +65,7 @@ const App = () => {
         }
       })();
     }
-  }, [t, firebase, setModal, location]);
+  }, [t, firebase, setModal, location, ready]);
   
   if (!ready || user === undefined) {
     return <StyledLoader size={50} show={true} />;

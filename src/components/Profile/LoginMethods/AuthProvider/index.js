@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import pn from "awesome-phonenumber";
 
 import { FirebaseContext } from "context/Firebase";
 import { UserContext } from "context/User";
@@ -17,7 +18,9 @@ import Loader from "shared/Loader";
 
 const StyledLoader = styled(Loader)`
   position: absolute;
-  right: -23px;
+  top: 15px;
+  right: 30px;
+  pointer-events: none;
 `;
 
 const AuthProvider = ({
@@ -85,6 +88,7 @@ const AuthProvider = ({
             id === "phone" ? () => updatePhoneNumber("link") : linkProvider
           }
           data-testid={`${id}-button`}
+          style={{color: isSubmitting ? "transparent" : ""}}
         >
           {t("link")}
         </Button>
@@ -95,7 +99,9 @@ const AuthProvider = ({
   return (
     <div className={className}>
       <Icon name={name} />
-      <UserId className="linked">{userId}</UserId>
+      <UserId className="linked">
+        {id === "phone" ? new pn(userId).getNumber("international")  : userId}
+      </UserId>
       <Button 
         className={id === "phone" && unlinkForbidden ? "change" : "linked"}
         onClick={
@@ -104,6 +110,7 @@ const AuthProvider = ({
             unlinkProvider
         }
         data-testid={`${id}-button`}
+        style={{color: isSubmitting ? "transparent" : ""}}
       >
         {id === "phone" && unlinkForbidden ? t("change") : t("unlink")}
       </Button>

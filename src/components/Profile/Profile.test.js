@@ -62,7 +62,7 @@ it("renders correctly", () => {
   expect(getByText(/saved/i)).toBeDisabled();
   expect(getByText(/loginMethods/i)).toBeInTheDocument();
   expect(getByAltText(/phone/i)).toBeInTheDocument();
-  expect(getByText(/79150000000/i)).toBeInTheDocument();
+  expect(getByText(/\+7 915 000-00-00/i)).toBeInTheDocument();
   expect(getByTestId(/phone-button/i)).toHaveTextContent("unlink");
   expect(getByAltText(/google/i)).toBeInTheDocument();
   expect(getByText(/notLinked/i)).toBeInTheDocument();

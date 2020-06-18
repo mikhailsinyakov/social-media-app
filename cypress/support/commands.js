@@ -1,13 +1,81 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/database";
+import "firebase/firestore";
+import { attachCustomCommands } from "cypress-firebase";
+
+const fbConfig = {
+  apiKey: Cypress.env("FIREBASE_API_KEY"),
+  authDomain: Cypress.env("FIREBASE_AUTH_DOMAIN"),
+  databaseURL: Cypress.env("FIREBASE_DATABASE_URL"),
+  projectId: Cypress.env("FIREBASE_PROJECT_ID"),
+  storageBucket: Cypress.env("FIREBASE_STORAGE_BUCKET"),
+  messagingSenderId: Cypress.env("FIREBASE_MESSAGING_SENDER_ID"),
+  appId: Cypress.env("FIREBASE_APP_ID")
+};
+
+firebase.initializeApp(fbConfig);
+
+attachCustomCommands({ Cypress, cy, firebase });
+
+Cypress.Commands.add(
+  'init',
+  () => {
+    cy.visit("/");
+    cy.window()
+      .its("firebase")
+      .its("auth").as("auth");
+});
+
+Cypress.Commands.add(
+  'nullifyUsername',
+  () => {
+    cy.get("@auth")
+      .invoke("updateUsername", null);
+});
+
+Cypress.Commands.add(
+  'refresh',
+  () => {
+    cy.reload();
+    cy.window()
+      .its("firebase")
+      .its("auth").as("auth");
+});
+
+Cypress.Commands.add(
+  'usePhoneNumber', 
+  action => {
+    cy.document()
+      .then(document => {
+        const recaptcha = document.createElement("div");
+        recaptcha.id = "recaptcha";
+        document.body.appendChild(recaptcha);
+      });
+    cy.get("@auth")
+      .invoke("sendSMSCode", "+79150000000");
+    cy.get("@auth")
+      .invoke(action, "123456");
+    cy.get("#recaptcha").then(recaptcha => recaptcha.remove());
+});
+
+Cypress.Commands.add(
+  'loginWithPhoneNumber', 
+  () => {
+    cy.usePhoneNumber("loginWithPhoneNumber");
+});
+
+Cypress.Commands.add(
+  'checkPhoneNumber', 
+  () => {
+    cy.usePhoneNumber("reauthenticate");
+});
+
+Cypress.Commands.add(
+  'linkPhoneNumber', 
+  () => {
+    cy.usePhoneNumber("linkPhoneNumber");
+});
 
 Cypress.Commands.add(
   'getGoogleToken',
@@ -38,6 +106,26 @@ Cypress.Commands.add(
       .its("body")
       .then(body => body.access_token);
     });
+});
+
+Cypress.Commands.add(
+  'loginWithGoogle', 
+  () => {
+    cy.getGoogleToken()
+      .then(token => {
+        cy.get("@auth")
+          .invoke("loginWithGoogleWithToken", token);
+      });
+});
+
+Cypress.Commands.add(
+  'linkGoogle',
+  () => {
+    cy.getGoogleToken()
+      .then(token => {
+        cy.get("@auth")
+          .invoke("linkGoogleWithToken", token);
+      });
 });
 
 Cypress.Commands.add(
@@ -75,4 +163,24 @@ Cypress.Commands.add(
         return params.access_token;
       })
     });
+});
+
+Cypress.Commands.add(
+  'loginWithGithub', 
+  () => {
+    cy.getGithubToken()
+      .then(token => {
+        cy.get("@auth")
+          .invoke("loginWithGithubWithToken", token);
+      });
+});
+
+Cypress.Commands.add(
+  'linkGithub',
+  () => {
+    cy.getGithubToken()
+      .then(token => {
+        cy.get("@auth")
+          .invoke("linkGithubWithToken", token);
+      });
 });

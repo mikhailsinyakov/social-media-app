@@ -16,7 +16,15 @@ const withContext = Component => props => {
   }, [Modal, setShow]);
   
   return (
-    <ModalContext.Provider value={{Modal, setModal, hideModal, show}}>
+    <ModalContext.Provider 
+      value={{
+        Modal, 
+        setModal: Modal => {
+          setTimeout(() => setModal(Modal), 400);
+        }, 
+        hideModal, 
+        show
+      }}>
       <Component {...props} />
     </ModalContext.Provider>
   );
