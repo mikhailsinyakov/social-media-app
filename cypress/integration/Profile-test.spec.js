@@ -165,16 +165,14 @@ describe("profile", () => {
   });
   
   it("deleting account", () => {
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "deleteAccount");
-      });
-    
     cy.contains(/delete account/i).click();
     cy.contains(/deleting account/i);
     cy.contains(/are you sure you want to delete your account/i);
-    cy.contains(/yes/i).click();
-    cy.get("@auth").its("deleteAccount").should("be.called");
+    cy.stubAndCheck(
+      () => cy.contains(/yes/i).click(),
+      "@auth",
+      "deleteAccount"
+    );
   });
   
   it("error while trying to change username", () => {
@@ -209,13 +207,12 @@ describe("profile", () => {
   
   it("error while trying to link provider", () => {
     cy.get('[data-testid="google.com-button"]').as("googleButton");
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "unlinkProvider");
-      });
-      
-    cy.get("@googleButton").click();
-    cy.get("@auth").its("unlinkProvider").should("be.calledWith", "google.com");
+    cy.stubAndCheck(
+      () => cy.get("@googleButton").click(),
+      "@auth",
+      "unlinkProvider",
+      "google.com"
+    );
     cy.refresh();
     cy.get("@auth")
       .then(auth => {

@@ -8,6 +8,7 @@ describe("login", () => {
   });
   
   it("by phone number", () => {
+    // Create aliases
     cy.get('[placeholder="Phone number"]').as("phone");
     cy.get('[data-testid="Phone number"]')
       .children()
@@ -30,12 +31,9 @@ describe("login", () => {
     cy.get("@phoneLoader").should("have.css", "opacity", "0");
     cy.contains(/enter a valid phone number/i)
       .should("have.css", "opacity", "0");
-    cy.get("@smsFormWrapper")
-      .should("have.css", "transform", "matrix(0, 0, 0, 0, 0, 0)");
-    cy.get("@didntGetCodeWrapper")
-      .should("have.css", "transform", "matrix(0, 0, 0, 0, 0, 0)");
-    cy.get("@sendAgainWrapper")
-      .should("have.css", "transform", "matrix(0, 0, 0, 0, 0, 0)");
+    cy.shouldHaveScale("@smsFormWrapper", 0);
+    cy.shouldHaveScale("@didntGetCodeWrapper", 0);
+    cy.shouldHaveScale("@sendAgainWrapper", 0);
       
     // The user types phone number
     cy.get('[placeholder="Phone number"]')
@@ -43,8 +41,7 @@ describe("login", () => {
       .should("have.value", "+7 915");
     cy.contains(/enter a valid phone number/i)
       .should("have.css", "opacity", "1");
-    cy.contains(/get code/i)
-      .should("be.disabled");
+    cy.contains(/get code/i).should("be.disabled");
     cy.get("@phone")
       .type("0000000")
       .should("have.value", "+7 915 000-00-00");
@@ -57,12 +54,9 @@ describe("login", () => {
     cy.get("@phoneLoader").should("have.css", "opacity", "1");
     cy.get("@phoneLoader").should("have.css", "opacity", "0");
     cy.contains(/get code/i).should("be.disabled");
-    cy.get("@smsFormWrapper")
-      .should("have.css", "transform", "matrix(1, 0, 0, 1, 0, 0)");
-    cy.get("@didntGetCodeWrapper")
-      .should("have.css", "transform", "matrix(1, 0, 0, 1, 0, 0)");
-    cy.get("@sendAgainWrapper")
-      .should("have.css", "transform", "matrix(1, 0, 0, 1, 0, 0)");
+    cy.shouldHaveScale("@smsFormWrapper", 1);
+    cy.shouldHaveScale("@didntGetCodeWrapper", 1);
+    cy.shouldHaveScale("@sendAgainWrapper", 1);
     cy.get("@sms").should("have.value", "");
     cy.contains(/log in/i).should("be.disabled");
     cy.contains(/bad verification code/i).should("not.be.visible");
@@ -74,22 +68,16 @@ describe("login", () => {
     cy.get("@phone")
       .type("{backspace}")
       .should("have.value", "+7 915 000-00-0");
-    cy.get("@smsFormWrapper")
-      .should("have.css", "transform", "matrix(0, 0, 0, 0, 0, 0)");
-    cy.get("@didntGetCodeWrapper")
-      .should("have.css", "transform", "matrix(0, 0, 0, 0, 0, 0)");
-    cy.get("@sendAgainWrapper")
-      .should("have.css", "transform", "matrix(0, 0, 0, 0, 0, 0)");
+    cy.shouldHaveScale("@smsFormWrapper", 0);
+    cy.shouldHaveScale("@didntGetCodeWrapper", 0);
+    cy.shouldHaveScale("@sendAgainWrapper", 0);
     cy.get("@phone")
       .type("0")
       .should("have.value", "+7 915 000-00-00");
     cy.contains(/get code/i).should("be.disabled");
-    cy.get("@smsFormWrapper")
-      .should("have.css", "transform", "matrix(1, 0, 0, 1, 0, 0)");
-    cy.get("@didntGetCodeWrapper")
-      .should("have.css", "transform", "matrix(1, 0, 0, 1, 0, 0)");
-    cy.get("@sendAgainWrapper")
-      .should("have.css", "transform", "matrix(1, 0, 0, 1, 0, 0)");
+    cy.shouldHaveScale("@smsFormWrapper", 1);
+    cy.shouldHaveScale("@didntGetCodeWrapper", 1);
+    cy.shouldHaveScale("@sendAgainWrapper", 1);
     cy.get("@sms").should("have.value", "");
     
     // The user types wrong SMS code and clicks "Log in" button

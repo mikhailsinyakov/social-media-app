@@ -63,7 +63,13 @@ Cypress.Commands.add(
         .should("be.called")
         .then(() => stub.restore());
     }
-    
+});
+
+Cypress.Commands.add(
+  'shouldHaveScale',
+  (selector, scale) => {
+    cy.get(selector)
+      .should("have.css", "transform", `matrix(${scale}, 0, 0, ${scale}, 0, 0)`);
 });
 
 Cypress.Commands.add(
