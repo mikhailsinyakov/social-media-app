@@ -108,24 +108,22 @@ describe("login", () => {
   });
   
   it("by Google", () => {
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "loginWithGoogle");
-      });
-    cy.contains(/sign in with google/i).click();
-    cy.get("@auth").its("loginWithGoogle").should("be.called");
+    cy.stubAndCheck(
+      () => cy.contains(/sign in with google/i).click(),
+      "@auth",
+      "loginWithGoogle"
+    );
     cy.loginWithGoogle();
     cy.url().should("match", /profile/);
   });
   
   it("by Github", () => {
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "loginWithGithub");
-      });
-    cy.contains(/sign in with github/i).click();
-    cy.get("@auth").its("loginWithGithub").should("be.called");
-    cy.loginWithGoogle();
+    cy.stubAndCheck(
+      () => cy.contains(/sign in with github/i).click(),
+      "@auth",
+      "loginWithGithub"
+    );
+    cy.loginWithGithub();
     cy.url().should("match", /profile/);
   });
   
@@ -182,12 +180,11 @@ describe("login", () => {
   });
   
   it("error while trying to log in by Google", () => {
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "loginWithGoogle");
-      });
-    cy.contains(/sign in with google/i).click();
-    cy.get("@auth").its("loginWithGoogle").should("be.called");
+    cy.stubAndCheck(
+      () => cy.contains(/sign in with google/i).click(),
+      "@auth",
+      "loginWithGoogle"
+    );
     
     cy.refresh();
     cy.get("@auth")
@@ -207,12 +204,11 @@ describe("login", () => {
   });
   
   it("error while trying to log in by Github", () => {
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "loginWithGithub");
-      });
-    cy.contains(/sign in with github/i).click();
-    cy.get("@auth").its("loginWithGithub").should("be.called");
+    cy.stubAndCheck(
+      () => cy.contains(/sign in with github/i).click(),
+      "@auth",
+      "loginWithGithub"
+    );
     
     cy.refresh();
     cy.get("@auth")

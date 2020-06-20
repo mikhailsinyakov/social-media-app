@@ -44,6 +44,29 @@ Cypress.Commands.add(
 });
 
 Cypress.Commands.add(
+  'stubAndCheck',
+  (action, alias, method, argument) => {
+    let stub;
+    cy.get(alias)
+      .then(obj => {
+        stub = cy.stub(obj, method);
+      });
+    action();
+    if (argument) {
+      cy.get(alias)
+        .its(method)
+        .should("be.calledWith", argument)
+        .then(() => stub.restore());
+    } else {
+      cy.get(alias)
+        .its(method)
+        .should("be.called")
+        .then(() => stub.restore());
+    }
+    
+});
+
+Cypress.Commands.add(
   'usePhoneNumber', 
   action => {
     cy.document()
@@ -114,7 +137,7 @@ Cypress.Commands.add(
     cy.getGoogleToken()
       .then(token => {
         cy.get("@auth")
-          .invoke("loginWithGoogleWithToken", token);
+          .invoke("loginWithGoogle", token);
       });
 });
 
@@ -124,7 +147,7 @@ Cypress.Commands.add(
     cy.getGoogleToken()
       .then(token => {
         cy.get("@auth")
-          .invoke("linkGoogleWithToken", token);
+          .invoke("linkProvider", "google.com", token);
       });
 });
 
@@ -171,7 +194,7 @@ Cypress.Commands.add(
     cy.getGithubToken()
       .then(token => {
         cy.get("@auth")
-          .invoke("loginWithGithubWithToken", token);
+          .invoke("loginWithGithub", token);
       });
 });
 
@@ -181,6 +204,6 @@ Cypress.Commands.add(
     cy.getGithubToken()
       .then(token => {
         cy.get("@auth")
-          .invoke("linkGithubWithToken", token);
+          .invoke("linkProvider", "github.com", token);
       });
 });

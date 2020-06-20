@@ -114,19 +114,16 @@ class Auth {
     }
   }
   
-  linkProvider(id) {
-    const provider = this.providers[id];
-    this.getCurrentUser().linkWithRedirect(provider);
-  }
-  
-  async linkGoogleWithToken(token) {
-    const credential = this.app.auth.GoogleAuthProvider.credential(null, token);
-    await this.getCurrentUser().linkWithCredential(credential);
-  }
-  
-  async linkGithubWithToken(token) {
-    const credential = this.app.auth.GithubAuthProvider.credential(token);
-    await this.getCurrentUser().linkWithCredential(credential);
+  async linkProvider(id, token) {
+    if (token) {
+      const credential = id === "google.com" ? 
+        this.app.auth.GoogleAuthProvider.credential(null, token) :
+        this.app.auth.GithubAuthProvider.credential(token);
+      await this.getCurrentUser().linkWithCredential(credential);
+    } else {
+      const provider = this.providers[id];
+      this.getCurrentUser().linkWithRedirect(provider);
+    }
   }
   
   getRedirectResult() {
@@ -155,22 +152,18 @@ class Auth {
     }
   }
   
-  loginWithGoogle() {
-    this.auth.signInWithRedirect(this.googleProvider);
+  async loginWithGoogle(token) {
+    if (token) {
+      const credential = this.app.auth.GoogleAuthProvider.credential(null, token);
+      await this.auth.signInWithCredential(credential);
+    } else this.auth.signInWithRedirect(this.googleProvider);
   }
   
-  loginWithGithub() {
-    this.auth.signInWithRedirect(this.githubProvider);
-  }
-  
-  async loginWithGoogleWithToken(token) {
-    const credential = this.app.auth.GoogleAuthProvider.credential(null, token);
-    await this.auth.signInWithCredential(credential);
-  }
-  
-  async loginWithGithubWithToken(token) {
-    const credential = this.app.auth.GithubAuthProvider.credential(token);
-    await this.auth.signInWithCredential(credential);
+  async loginWithGithub(token) {
+    if (token) {
+      const credential = this.app.auth.GithubAuthProvider.credential(token);
+      await this.auth.signInWithCredential(credential);
+    } else this.auth.signInWithRedirect(this.githubProvider);
   }
   
   async deleteAccount() {

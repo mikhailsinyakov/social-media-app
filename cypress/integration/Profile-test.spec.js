@@ -140,24 +140,24 @@ describe("profile", () => {
     cy.window().its("firebase").its("auth").as("auth");
     
     // Link Google
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "linkProvider");
-      });
-    cy.get("@googleButton").click();
-    cy.get("@auth").its("linkProvider").should("be.calledWith", "google.com");
+    cy.stubAndCheck(
+      () => cy.get("@googleButton").click(),
+      "@auth",
+      "linkProvider",
+      "google.com"
+    );
     
     cy.linkGoogle();
     cy.refresh();
     cy.get("@googleButton").contains(/^unlink$/i);
     
     // Link Github
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "linkProvider");
-      });
-    cy.get("@githubButton").click();
-    cy.get("@auth").its("linkProvider").should("be.calledWith", "github.com");
+    cy.stubAndCheck(
+      () => cy.get("@githubButton").click(),
+      "@auth",
+      "linkProvider",
+      "github.com"
+    );
     
     cy.linkGithub();
     cy.refresh();
@@ -328,23 +328,23 @@ describe("profile", () => {
     cy.window().its("firebase").its("auth").as("auth");
     
     // Link Google
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "linkProvider");
-      });
-    cy.get("@googleButton").click();
-    cy.get("@auth").its("linkProvider").should("be.calledWith", "google.com");
+    cy.stubAndCheck(
+      () => cy.get("@googleButton").click(),
+      "@auth",
+      "linkProvider",
+      "google.com"
+    );
     cy.linkGoogle();
     cy.refresh();
     cy.get("@googleButton").contains(/^unlink$/i);
     
     // Link Github
-    cy.get("@auth")
-      .then(auth => {
-        cy.stub(auth, "linkProvider");
-      });
-    cy.get("@githubButton").click();
-    cy.get("@auth").its("linkProvider").should("be.calledWith", "github.com");
+    cy.stubAndCheck(
+      () => cy.get("@githubButton").click(),
+      "@auth",
+      "linkProvider",
+      "github.com"
+    );
     cy.linkGithub();
     cy.refresh();
     cy.get("@githubButton").contains(/^unlink$/i);

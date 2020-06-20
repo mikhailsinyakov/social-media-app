@@ -113,7 +113,8 @@ const Form = ({
   }, [showMsg, setMsgPos]);
   
   useEffect(() => {
-    initValue && !value && updateValue({target: { value: initValue, selectionStart: 16 }});
+    initValue && !value && isMount &&
+    updateValue({target: { value: initValue, selectionStart: 16 }});
   }, [initValue, value, updateValue]);
   
   useEffect(() => {

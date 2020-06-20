@@ -55,8 +55,6 @@ const App = () => {
           const notCompletedAction = location.pathname === "/login" ? 
                                       t("couldntLoginWith") : 
                                       t("couldntLink");
-          console.log(`${notCompletedAction} ${providerId}. ${t(cause)}`)
-          console.log(t("couldntLoginWith"))
           setModal(
             <ErrorModal>
               {`${notCompletedAction} ${providerId}. ${t(cause)}`}
