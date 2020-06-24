@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 
 import Auth from "./Auth";
+import Firestore from "./Firestore";
  
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -16,6 +17,7 @@ class Firebase {
   constructor() {
     if (!app.apps.length) app.initializeApp(config);
     this.auth = new Auth(app);
+    this.db = new Firestore(app);
   }
 }
  

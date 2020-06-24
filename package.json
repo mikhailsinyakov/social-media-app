@@ -9,6 +9,7 @@
     "awesome-phonenumber": "^2.31.0",
     "cypress": "^4.7.0",
     "firebase": "^7.14.2",
+    "firebase-functions": "^3.7.0",
     "i18next": "^19.4.4",
     "i18next-browser-languagedetector": "^4.1.1",
     "i18next-xhr-backend": "^3.2.2",
